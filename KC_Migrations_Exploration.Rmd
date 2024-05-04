@@ -1,0 +1,401 @@
+---
+title: "ACS County Migration Flows 2019-2020"
+author: "Malia Cortez"
+date: "2024-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(readxl)
+library(stats)
+library(tidycensus)
+library(ggplot2)
+library(sf)
+library(stringr)
+library(data.table)
+library(tree)
+library(keras)
+```
+
+ACS migration data from ACS `tidycensus` package. County population, race, age, sex data from NHGIS.
+
+## Load in Data
+```{r}
+# all data from ACS. Data analyzed is from 2019
+# try to load in demographics at some point with "breakdown"
+acs_county_flows.2019 <- get_flows(geography = "county",
+                           state="WA",
+                           year = 2019,
+                           geometry = TRUE)
+
+acs_county_flows.2020 <- get_flows(geography = "county",
+                           state="WA",
+                           year = 2020,
+                           geometry = TRUE)
+
+# load in county population data
+dat <- read.csv("data/county_pops.csv")
+
+# gut checking
+head(acs_county_flows.2019)
+
+# load in county characteristics
+## AKSME001: total
+## AKSME002: White alone
+## AKSME003: Black or African American alone
+## AKSME004: American Indian and Alaska Native alone
+## AKSME005: Asian alone
+## AKSME006: Native Hawaiian and Other Pacific Islander alone
+## AKSME007: Some other race alone
+## AKSME008: Two or more races
+## AKSME009: Two or more races: Two races including Some other race
+## AKSME010: Two or more races: Two races excluding Some other race, and three or more races
+acs_char_2019 <- read.csv("data/nhgis_sex_race.csv")
+
+```
+
+## Data Wrangling
+```{r}
+# select name and population
+county_pops_2019 <- dat %>% 
+  select(c(NAME_M, AKSLE001))
+
+# narrow to just king county
+kc_flows_2019 <- acs_county_flows.2019 %>% 
+  filter(FULL1_NAME == "King County, Washington") %>% 
+  select(c(FULL1_NAME, FULL2_NAME, variable, estimate))
+
+head(kc_flows_2019)
+
+# filter for just "MOVEDOUT"
+kc_movers_2019 <- kc_flows_2019 %>% 
+  filter(variable=="MOVEDOUT")
+
+# filter for county characteristics
+
+head(kc_movers_2019)
+```
+```{r}
+## AKSME001: total
+## AKSME002: White alone
+## AKSME003: Black or African American alone
+## AKSME004: American Indian and Alaska Native alone
+## AKSME005: Asian alone
+## AKSME006: Native Hawaiian and Other Pacific Islander alone
+## AKSME007: Some other race alone
+## AKSME008: Two or more races
+## AKSME009: Two or more races: Two races including Some other race
+## AKSME010: Two or more races: Two races excluding Some other race, and three or more races
+
+county_race <- acs_char_2019 %>% 
+  select(c(NAME_E, AKSME001, AKSME002, AKSME003, AKSME004, AKSME005, AKSME006, AKSME007, AKSME008, AKSME009, AKSME010))
+
+# rename columns
+setnames(county_race, old=c("NAME_E", "AKSME001", "AKSME002", "AKSME003", "AKSME004", "AKSME005", "AKSME006", "AKSME007", "AKSME008", "AKSME009", "AKSME010"), new=c("county_name", "total", "white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus_alone", "two_some_other", "two_ex_some_three_plus"))
+
+head(county_race)
+```
+
+
+```{r}
+# join movers with county data
+# outer join
+county_moves <- merge(kc_movers_2019, county_pops_2019, by.x="FULL2_NAME", by.y = "NAME_M", all.y=TRUE) %>%
+  select(-(variable))
+
+county_moves$FULL1_NAME <- "King County, Washington"
+
+# rename variables
+names(county_moves)[names(county_moves) == 'AKSLE001'] <- 'tot_pop'
+names(county_moves)[names(county_moves) == 'estimate'] <- 'movers'
+names(county_moves)[names(county_moves) == 'FULL2_NAME'] <- 'county2'
+names(county_moves)[names(county_moves) == 'FULL1_NAME'] <- 'county1'
+
+```
+
+
+### Blank Cells
+For county-to-county migration data, estimates may be blank because:
+
+1. Estimate is out of scope (world regions)
+2. Estimate DNE - an example would be movers to a different county in same state for Washington, DC (likely doesn't apply for King County)
+3. Supplemental statistics for county of residence one year ago or MCD of residence one year ago suppressed due to disclosure avoidance
+
+**Flows with no records in the database and suppressed flows crossed by characteristics are not included in the files. The flows with no records are considered zero count estimates.**
+
+I only included other US regions in this analysis. Further, I did a right join, with the right database being all US counties. For these reasons, I am assuming it is reasonable to just put "0" for blank estimates.
+
+```{r}
+# replace NAs in dataset with 0
+county_moves[is.na(county_moves)] <- 0
+```
+
+```{r}
+# make sure to remove the row with "King County" as county2
+head(county_moves)
+
+# calculate pct county characteristics
+```
+
+
+## EDA/More Wrangling...
+
+```{r}
+# how many NAs in movers?
+# plot movers
+unique(county_moves$county2)
+# 0 (nice)
+sum(is.na(county_moves$movers))
+
+# how many NAs in race data?
+# 59 NAs
+sum(is.na(county_race$total))
+
+# which counties are NA?
+# lots of southern counties missing...?
+county_race[is.na(county_race$total),]
+
+# are there discrepancies between race data and total pop data?
+# king county is the same but let's plot
+county_moves[county_moves$county2 == "King County, Washington",]
+county_race[county_race$county_name == "King County, Washington",]
+
+plot(county_moves$tot_pop, county_race$total, main = "Total Population (Race vs Pop Table)")
+# seems like there are some discrepancies...
+plot(county_moves$tot_pop - county_race$total, type='h', ylab = "Difference (County vs. Race Data)")
+
+## most have small differences... will just go with the county population data rather than the race. likely more standardized
+
+# join move data with race data and get rid of county 1 (King County)
+county_race_moves <- merge(county_moves, county_race, by.x="county2", by.y = "county_name", all.x=TRUE) %>% 
+  select(-c(total, county1))
+
+head(county_race_moves)
+
+# change the weird string stuff
+county_race_moves$county2 <- iconv(county_race_moves$county2, "UTF-8", "ASCII", sub = "")
+```
+- Supplement with US census data manually? Also, not all race categories are reflected in the census county estimates... include all but Hispanic/Latino?
+- Supplement totals with county pop data
+- Remove the missing ones for now and train?
+
+# EDA
+```{r}
+# which counties saw most people moving from King County?
+# top 10
+top_10 <- county_race_moves %>% 
+  arrange(desc(movers)) %>% 
+  slice(1:10)
+
+ggplot(data = top_10, mapping = aes(x = reorder(county2, -movers), y = movers)) +
+  geom_col(stat = "identity") +
+  theme(axis.text.x = element_text(angle=45, vjust = 1))
+```
+Lots of movers to nearby counties. Makes sense.
+
+```{r}
+# calculate race percentages and supplement data
+# remove "conflicting" race categories
+county_race[is.na(county_race$total),]
+```
+```{r}
+# input ACS characteristics for missing counties
+# exclude the categories that feed into "two plus"
+county_race_moves <- county_race_moves %>% 
+  select(-c(two_some_other, two_ex_some_three_plus))
+
+# test this out
+race_test <- get_acs(geography = "county", variables = c("B02001_001", "B02001_002", "B02001_003", "B02001_004", "B02001_005", "B02001_006", "B02001_007", "B02001_008"), year = 2019, output="wide") %>% 
+    # exclude MOE estimates
+    select(-c(B02001_001M, B02001_002M, B02001_003M, B02001_004M, B02001_005M, B02001_006M, B02001_007M, B02001_008M))
+
+sum(is.na(race_test$B02001_003E)) 
+```
+## Functions
+```{r}
+# define functions to clean and join data given year
+create_county_flows <- function(year) {
+  # load flows for WA King County
+  king_county_flows <- get_flows(geography = "county",
+                           state="WA",
+                           county="King",
+                           year = year,
+                           geometry = TRUE)
+  
+  # filter for just movers out of KC
+  king_county_flows <- king_county_flows %>% 
+    filter(variable == "MOVEDOUT") %>% 
+    select(-c(moe, FULL1_NAME, variable))
+  
+  # rename migration columns
+  setnames(king_county_flows, 
+           old=c("FULL2_NAME", "estimate"), 
+           new=c("county_name", "movers"))
+  
+  # call for race data up to "two or more"
+  county_races <- get_acs(geography = "county", variables = c("B02001_001", "B02001_002", "B02001_003", "B02001_004", "B02001_005", "B02001_006", "B02001_007", "B02001_008"),
+                          year = year, output="wide") %>% 
+    # exclude MOE estimates
+    select(-c(B02001_001M, B02001_002M, B02001_003M, B02001_004M, B02001_005M, B02001_006M, B02001_007M, B02001_008M))
+  
+  # rename race columns
+  setnames(county_races, 
+           old=c("NAME", "B02001_001E", "B02001_002E", "B02001_003E", "B02001_004E", "B02001_005E", "B02001_006E", "B02001_007E", "B02001_008E"), 
+           new=c("county_name", "total_pop", "white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus"))
+  
+  king_county_comp <- merge(king_county_flows, county_races, by = "county_name", all.y=TRUE) %>% 
+    select(-c(GEOID1, GEOID2, centroid2)) %>% 
+    data.frame()
+  
+  king_county_comp[is.na(king_county_comp)] <- 0
+  return(king_county_comp)
+}
+```
+
+```{r}
+# define a function to calculate percentages of each race given dataset
+calc_percentages <- function(data){
+  race_cols <- c("white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus")
+  
+  for (race in race_cols) {
+    data[[race]] <- (data[[race]] / data$total_pop) * 100
+  }
+  
+  return(data)
+}
+```
+
+```{r}
+# define a function to calculate percent difference between KC and other counties
+calc_differences <- function(data) {
+  race_cols <- c("white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus")
+
+  kc <- data[data$county_name == "King County, Washington",]
+  
+  # get differences between king county and column
+  pct_diff <- lapply(race_cols, function(race) {
+    data[[race]] - kc[[race]]
+  })
+  
+  # convert to a dataframe
+  pct_diff_df <- as.data.frame(pct_diff)
+  
+  # rename cols
+  colnames(pct_diff_df) <- paste0("diff_pct_", race_cols)
+  
+  # bind percentage differences
+  data <- cbind(data, pct_diff_df)
+  
+  return(data)
+}
+```
+
+
+```{r}
+# yay!
+dat.2019 <- create_county_flows(2019)
+pct.2019 <- calc_percentages(dat.2019)
+
+# yay!
+# differences calculated by King County - each county
+diffs <- calc_differences(pct.2019)
+```
+## Models
+
+### Tree (Raw Percentages)
+```{r}
+# exclude KC
+pct.2019 <- pct.2019 %>% 
+  select(-c(GEOID, centroid2)) %>% 
+  filter(county_name != "King County, Washington")
+```
+
+```{r}
+set.seed(2)
+
+train <- sample(1:nrow(pct.2019), nrow(pct.2019) * 0.8)
+
+vars <- c("movers", "white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus")
+
+pct.2019 <- pct.2019 %>% 
+  select(all_of(vars))
+
+pcts.train <- pct.2019[train,]
+pcts.test <- pct.2019[-train,]
+
+tree.pcts <- tree(movers ~ ., data=pcts.train)
+summary(tree.pcts)
+```
+```{r}
+plot(tree.pcts)
+text(tree.pcts, pretty = 0)
+```
+
+```{r}
+# predict on test set
+yhat <- predict(tree.pcts, newdata=pcts.test)
+
+plot(yhat, pcts.test$movers)
+abline(0, 1)
+```
+```{r}
+# lmaooo
+sqrt(mean((yhat - pcts.test$movers)^2))
+```
+### Tree (Percentage Differences)
+
+```{r}
+# select data
+data <- diffs %>% 
+  select(c(county_name, movers, diff_pct_white_alone, diff_pct_black_alone,
+           diff_pct_amer_ind_ak_alone, diff_pct_asian_alone,
+           diff_pct_nat_haw_pac_alone, diff_pct_other_alone,
+           diff_pct_two_plus))
+
+mod.data <- data %>% 
+  select(c(movers, diff_pct_white_alone, diff_pct_black_alone,
+           diff_pct_amer_ind_ak_alone, diff_pct_asian_alone,
+           diff_pct_nat_haw_pac_alone, diff_pct_other_alone,
+           diff_pct_two_plus))
+
+y <- data$movers
+```
+
+
+```{r}
+set.seed(2)
+
+train <- sample(1:nrow(mod.data), nrow(mod.data) * 0.8)
+
+pcts.train <- mod.data[train,]
+pcts.test <- mod.data[-train,]
+
+tree.pcts <- tree(movers ~ ., data=pcts.train)
+summary(tree.pcts)
+```
+```{r}
+plot(tree.pcts)
+text(tree.pcts, pretty = 0)
+```
+
+```{r}
+# predict on test set
+yhat <- predict(tree.pcts, newdata=pcts.test)
+
+plot(yhat, pcts.test$movers)
+abline(0, 1)
+```
+
+```{r}
+# much better!
+sqrt(mean((yhat - pcts.test$movers)^2))
+```
+
+
+```{r}
+# try random forest next 
+```
+

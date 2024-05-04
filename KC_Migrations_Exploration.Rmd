@@ -316,19 +316,21 @@ pct.2019 <- pct.2019 %>%
 ```{r}
 set.seed(2)
 
-train <- sample(1:nrow(pct.2019), nrow(pct.2019) * 0.8)
+data <- pct.2019 %>% 
+  select(c(county_name, movers, white_alone, black_alone, amer_ind_ak_alone, asian_alone, nat_haw_pac_alone, other_alone, two_plus))
 
-vars <- c("movers", "white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus")
+mod1.data <- data %>% 
+  select(c(movers, white_alone, black_alone, amer_ind_ak_alone, asian_alone, nat_haw_pac_alone, other_alone, two_plus))
 
-pct.2019 <- pct.2019 %>% 
-  select(all_of(vars))
+train <- sample(1:nrow(mod1.data), nrow(mod1.data) * 0.8)
 
-pcts.train <- pct.2019[train,]
-pcts.test <- pct.2019[-train,]
+pcts.train <- mod1.data[train,]
+pcts.test <- mod1.data[-train,]
 
 tree.pcts <- tree(movers ~ ., data=pcts.train)
 summary(tree.pcts)
 ```
+
 ```{r}
 plot(tree.pcts)
 text(tree.pcts, pretty = 0)
@@ -341,11 +343,21 @@ yhat <- predict(tree.pcts, newdata=pcts.test)
 plot(yhat, pcts.test$movers)
 abline(0, 1)
 ```
+
 ```{r}
 # lmaooo
+mean((yhat - pcts.test$movers)^2)
 sqrt(mean((yhat - pcts.test$movers)^2))
 ```
+
+
 ### Tree (Percentage Differences)
+```{r}
+# exclude KC
+diffs <- diffs %>% 
+  filter(county_name != "King County, Washington")
+```
+
 
 ```{r}
 # select data
@@ -381,16 +393,19 @@ plot(tree.pcts)
 text(tree.pcts, pretty = 0)
 ```
 
+
 ```{r}
 # predict on test set
 yhat <- predict(tree.pcts, newdata=pcts.test)
 
+# seem to have some outliers affecting the data
 plot(yhat, pcts.test$movers)
 abline(0, 1)
 ```
 
 ```{r}
-# much better!
+# slightly better MSE
+mean((yhat - pcts.test$movers)^2)
 sqrt(mean((yhat - pcts.test$movers)^2))
 ```
 

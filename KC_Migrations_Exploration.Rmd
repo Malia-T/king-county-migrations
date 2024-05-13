@@ -178,11 +178,7 @@ head(county_race_moves)
 # change the weird string stuff
 county_race_moves$county2 <- iconv(county_race_moves$county2, "UTF-8", "ASCII", sub = "")
 ```
-- Supplement with US census data manually? Also, not all race categories are reflected in the census county estimates... include all but Hispanic/Latino?
-- Supplement totals with county pop data
-- Remove the missing ones for now and train?
 
-# EDA
 ```{r}
 # which counties saw most people moving from King County?
 # top 10
@@ -195,6 +191,7 @@ ggplot(data = top_10, mapping = aes(x = reorder(county2, -movers), y = movers)) 
   theme(axis.text.x = element_text(angle=45, vjust = 1))
 ```
 Lots of movers to nearby counties. Makes sense.
+
 
 ```{r}
 # calculate race percentages and supplement data
@@ -217,6 +214,7 @@ sum(is.na(race_test$B02001_003E))
 ## Functions
 ```{r}
 # define functions to clean and join data given year
+# TODO: MODIFY TO INCLUDE MULTIPLE YEARS WITH RBIND
 create_county_flows <- function(year) {
   # load flows for WA King County
   king_county_flows <- get_flows(geography = "county",
@@ -303,6 +301,8 @@ pct.2019 <- calc_percentages(dat.2019)
 # differences calculated by King County - each county
 diffs <- calc_differences(pct.2019)
 ```
+## EDA
+
 ## Models
 
 ### Tree (Raw Percentages)
@@ -316,9 +316,11 @@ pct.2019 <- pct.2019 %>%
 ```{r}
 set.seed(2)
 
+# select variables for analysis
 data <- pct.2019 %>% 
   select(c(county_name, movers, white_alone, black_alone, amer_ind_ak_alone, asian_alone, nat_haw_pac_alone, other_alone, two_plus))
 
+# model data
 mod1.data <- data %>% 
   select(c(movers, white_alone, black_alone, amer_ind_ak_alone, asian_alone, nat_haw_pac_alone, other_alone, two_plus))
 
@@ -380,6 +382,7 @@ y <- data$movers
 ```{r}
 set.seed(2)
 
+# train/test
 train <- sample(1:nrow(mod.data), nrow(mod.data) * 0.8)
 
 pcts.train <- mod.data[train,]
@@ -412,5 +415,16 @@ sqrt(mean((yhat - pcts.test$movers)^2))
 
 ```{r}
 # try random forest next 
+```
+
+```{r}
+# try linear model
+# low p value... hmm
+basic.lin.mod <- lm(movers ~ ., data = mod.data)
+summary(basic.lin.mod)
+```
+
+```{r}
+
 ```
 

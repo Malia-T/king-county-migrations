@@ -303,6 +303,13 @@ diffs <- calc_differences(pct.2019)
 ```
 ## EDA
 
+```{r}
+# distribution of movers
+# mostly 0
+ggplot(data = mod.data, mapping = aes(x = movers)) +
+  geom_histogram()
+```
+
 ## Models
 
 ### Tree (Raw Percentages)
@@ -422,9 +429,5 @@ sqrt(mean((yhat - pcts.test$movers)^2))
 # low p value... hmm
 basic.lin.mod <- lm(movers ~ ., data = mod.data)
 summary(basic.lin.mod)
-```
-
-```{r}
-
 ```
 

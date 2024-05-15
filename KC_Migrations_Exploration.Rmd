@@ -359,7 +359,19 @@ sum(is.na(race_test$B02001_003E))
 
 ### Trying out ipumsr package functions
 ```{r}
+median_hou_msa_2019 <- read_nhgis("data/nhgis0004_csv/nhgis0004_ds243_2019_metdiv.csv")
 
+head(median_hou_msa_2019)
+
+mig <- get_flows(
+  geography = "metropolitan statistical area",
+  breakdown_labels = TRUE,
+  msa = 42660,
+  year = 2019,
+  geometry = TRUE
+)
+
+head(mig)
 ```
 
 

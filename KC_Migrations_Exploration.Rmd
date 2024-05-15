@@ -288,12 +288,18 @@ ggplot() +
           color = 'grey') +
   geom_sf(data = sea_dots,
           aes(color = variable),
-          size = 0.05) +
+          size = 1) +
   theme_void()
 # define a function to gather median income, other socioeconomic data
 #create_socioecon_data <- function(year) {
   
 #}
+
+# test2 <- get_flows(geography = "county subdivision",
+#                            state="WA",
+#                            #county="King County",
+#                            year = 2020,
+#                            geometry = TRUE)
 ```
 
 

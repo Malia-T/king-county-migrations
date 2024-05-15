@@ -20,6 +20,8 @@ library(tree)
 library(keras)
 library(terra)
 library(mapdeck)
+library(survey)
+library(srvyr)
 ```
 
 ACS migration data from ACS `tidycensus` package. County population, race, age, sex data from NHGIS.
@@ -253,7 +255,16 @@ sea_flows_2015 <- get_flows(
   geometry = TRUE
 )
 
+sea_flows_2020 <- get_flows(
+  geography = "metropolitan statistical area",
+  breakdown_labels = TRUE,
+  msa = 42660,
+  year = 2020,
+  geometry = TRUE
+)
+
 head(sea_flows_2015)
+head(sea_flows_2020)
 ```
 
 ```{r}
@@ -282,7 +293,35 @@ top_move_out %>%
     highlight_colour = "#8c43facc",
     tooltip = "tooltip"
   ) %>% 
-  add_title(title = list(title = "Top 25 Emigrants from SEA-TAC-BELL Metropolitan Statistical Areas",
+  add_title(title = list(title = "Top 25 Emigrants from SEA-TAC-BELL Metropolitan Statistical Areas (2011 - 2015)",
+            css = "color: black;"))
+```
+
+```{r}
+top_move_out <- sea_flows_2020 %>% 
+  filter(!is.na(GEOID2), variable == "MOVEDOUT") %>% 
+  slice_max(n = 25, order_by = estimate) %>% 
+  mutate(
+    width = estimate / 500,
+    tooltip = paste0(
+      scales::comma(estimate * 5, 1),
+      " people moved from ", str_remove(FULL1_NAME, "Metro Area"),
+      " to ", str_remove(FULL2_NAME, "Metro Area"), " between 2011 and 2015"
+    )
+  )
+
+# map the top 25 MSAs moving out from WA
+top_move_out %>% 
+  mapdeck(style=mapdeck_style("dark"), pitch = 45) %>% 
+  add_arc(
+    origin = "centroid1",
+    destination = "centroid2",
+    stroke_width = "width",
+    auto_highlight = TRUE,
+    highlight_colour = "#8c43facc",
+    tooltip = "tooltip"
+  ) %>% 
+  add_title(title = list(title = "Top 25 Emigrants from SEA-TAC-BELL Metropolitan Statistical Areas (2016 - 2020)",
             css = "color: black;"))
 ```
 

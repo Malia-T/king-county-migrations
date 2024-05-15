@@ -1,0 +1,769 @@
+--------------------------------------------------------------------------------
+Codebook for NHGIS data file 'nhgis0002_ds243_2019_county'
+--------------------------------------------------------------------------------
+ 
+Contents
+    - Data Summary
+    - Data Dictionary
+    - Citation and Use
+ 
+Additional documentation on NHGIS data sources is available at: 
+    https://www.nhgis.org/documentation/tabular-data 
+ 
+--------------------------------------------------------------------------------
+Data Summary
+--------------------------------------------------------------------------------
+ 
+Year:             2019
+Geographic level: County (by State)
+Dataset:          2019 American Community Survey: 1-Year Data
+   NHGIS code:    2019_ACS1
+   NHGIS ID:      ds243
+Breakdown(s):     Geographic Component:
+                     Total area (00)
+Data type(s):     (E) Estimates
+                  (M) Margins of error
+ 
+Tables:
+ 
+1. Sex by Age (White Alone)
+   Universe:    People who are White alone
+   Source code: B01001A
+   NHGIS code:  AKRT
+ 
+2. Sex by Age (Black or African American Alone)
+   Universe:    Black or African American alone
+   Source code: B01001B
+   NHGIS code:  AKRV
+ 
+3. Sex by Age (American Indian and Alaska Native Alone)
+   Universe:    People who are American Indian and Alaska Native alone
+   Source code: B01001C
+   NHGIS code:  AKRX
+ 
+4. Sex by Age (Asian Alone)
+   Universe:    People who are Asian alone
+   Source code: B01001D
+   NHGIS code:  AKRZ
+ 
+5. Sex by Age (Native Hawaiian and Other Pacific Islander Alone)
+   Universe:    People who are Native Hawaiian and Other Pacific Islander alone
+   Source code: B01001E
+   NHGIS code:  AKR1
+ 
+6. Sex by Age (Some Other Race Alone)
+   Universe:    People who are Some Other Race alone
+   Source code: B01001F
+   NHGIS code:  AKR3
+ 
+7. Sex by Age (Two or More Races)
+   Universe:    People who are Two or More Races
+   Source code: B01001G
+   NHGIS code:  AKR5
+ 
+8. Sex by Age (White Alone, Not Hispanic or Latino)
+   Universe:    White alone, not Hispanic or Latino population
+   Source code: B01001H
+   NHGIS code:  AKR7
+ 
+9. Race
+   Universe:    Total population
+   Source code: B02001
+   NHGIS code:  AKSM
+ 
+--------------------------------------------------------------------------------
+Data Dictionary
+--------------------------------------------------------------------------------
+ 
+Context Fields 
+        GISJOIN:     GIS Join Match Code
+        YEAR:        Data File Year
+        STUSAB:      State Postal Abbreviation
+        REGIONA:     Region Code
+        DIVISIONA:   Division Code
+        STATE:       State Name
+        STATEA:      State Code
+        COUNTY:      County Name
+        COUNTYA:     County Code
+        COUSUBA:     County Subdivision Code
+        PLACEA:      Place Code
+        AIANHHA:     American Indian Area/Alaska Native Area/Hawaiian Home Land Code
+        ANRCA:       Alaska Native Regional Corporation Code
+        CBSAA:       Metropolitan Statistical Area/Micropolitan Statistical Area Code
+        CSAA:        Combined Statistical Area Code
+        METDIVA:     Metropolitan Division Code
+        NECTAA:      New England City and Town Area Code
+        CNECTAA:     Combined New England City and Town Area Code
+        NECTADIVA:   New England City and Town Area Division Code
+        UAA:         Urban Area Code
+        CDCURRA:     Congressional District (2019-2021, 116th Congress) Code
+        SDELMA:      School District (Elementary)/Remainder Code
+        SDSECA:      School District (Secondary)/Remainder Code
+        SDUNIA:      School District (Unified)/Remainder Code
+        PCI:         Principal City Indicator
+        PUMAA:       Public Use Microdata Area Code
+        GEOID:       Census Geographic Identifier
+ 
+Data Type (E):
+    Estimates
+ 
+        NAME_E:      Area Name
+ 
+    Table 1:     Sex by Age (White Alone)
+    Universe:    People who are White alone
+    Source code: B01001A
+    NHGIS code:  AKRT
+        AKRTE001:    Total
+        AKRTE002:    Male
+        AKRTE003:    Male: Under 5 years
+        AKRTE004:    Male: 5 to 9 years
+        AKRTE005:    Male: 10 to 14 years
+        AKRTE006:    Male: 15 to 17 years
+        AKRTE007:    Male: 18 and 19 years
+        AKRTE008:    Male: 20 to 24 years
+        AKRTE009:    Male: 25 to 29 years
+        AKRTE010:    Male: 30 to 34 years
+        AKRTE011:    Male: 35 to 44 years
+        AKRTE012:    Male: 45 to 54 years
+        AKRTE013:    Male: 55 to 64 years
+        AKRTE014:    Male: 65 to 74 years
+        AKRTE015:    Male: 75 to 84 years
+        AKRTE016:    Male: 85 years and over
+        AKRTE017:    Female
+        AKRTE018:    Female: Under 5 years
+        AKRTE019:    Female: 5 to 9 years
+        AKRTE020:    Female: 10 to 14 years
+        AKRTE021:    Female: 15 to 17 years
+        AKRTE022:    Female: 18 and 19 years
+        AKRTE023:    Female: 20 to 24 years
+        AKRTE024:    Female: 25 to 29 years
+        AKRTE025:    Female: 30 to 34 years
+        AKRTE026:    Female: 35 to 44 years
+        AKRTE027:    Female: 45 to 54 years
+        AKRTE028:    Female: 55 to 64 years
+        AKRTE029:    Female: 65 to 74 years
+        AKRTE030:    Female: 75 to 84 years
+        AKRTE031:    Female: 85 years and over
+ 
+    Table 2:     Sex by Age (Black or African American Alone)
+    Universe:    Black or African American alone
+    Source code: B01001B
+    NHGIS code:  AKRV
+        AKRVE001:    Total
+        AKRVE002:    Male
+        AKRVE003:    Male: Under 5 years
+        AKRVE004:    Male: 5 to 9 years
+        AKRVE005:    Male: 10 to 14 years
+        AKRVE006:    Male: 15 to 17 years
+        AKRVE007:    Male: 18 and 19 years
+        AKRVE008:    Male: 20 to 24 years
+        AKRVE009:    Male: 25 to 29 years
+        AKRVE010:    Male: 30 to 34 years
+        AKRVE011:    Male: 35 to 44 years
+        AKRVE012:    Male: 45 to 54 years
+        AKRVE013:    Male: 55 to 64 years
+        AKRVE014:    Male: 65 to 74 years
+        AKRVE015:    Male: 75 to 84 years
+        AKRVE016:    Male: 85 years and over
+        AKRVE017:    Female
+        AKRVE018:    Female: Under 5 years
+        AKRVE019:    Female: 5 to 9 years
+        AKRVE020:    Female: 10 to 14 years
+        AKRVE021:    Female: 15 to 17 years
+        AKRVE022:    Female: 18 and 19 years
+        AKRVE023:    Female: 20 to 24 years
+        AKRVE024:    Female: 25 to 29 years
+        AKRVE025:    Female: 30 to 34 years
+        AKRVE026:    Female: 35 to 44 years
+        AKRVE027:    Female: 45 to 54 years
+        AKRVE028:    Female: 55 to 64 years
+        AKRVE029:    Female: 65 to 74 years
+        AKRVE030:    Female: 75 to 84 years
+        AKRVE031:    Female: 85 years and over
+ 
+    Table 3:     Sex by Age (American Indian and Alaska Native Alone)
+    Universe:    People who are American Indian and Alaska Native alone
+    Source code: B01001C
+    NHGIS code:  AKRX
+        AKRXE001:    Total
+        AKRXE002:    Male
+        AKRXE003:    Male: Under 5 years
+        AKRXE004:    Male: 5 to 9 years
+        AKRXE005:    Male: 10 to 14 years
+        AKRXE006:    Male: 15 to 17 years
+        AKRXE007:    Male: 18 and 19 years
+        AKRXE008:    Male: 20 to 24 years
+        AKRXE009:    Male: 25 to 29 years
+        AKRXE010:    Male: 30 to 34 years
+        AKRXE011:    Male: 35 to 44 years
+        AKRXE012:    Male: 45 to 54 years
+        AKRXE013:    Male: 55 to 64 years
+        AKRXE014:    Male: 65 to 74 years
+        AKRXE015:    Male: 75 to 84 years
+        AKRXE016:    Male: 85 years and over
+        AKRXE017:    Female
+        AKRXE018:    Female: Under 5 years
+        AKRXE019:    Female: 5 to 9 years
+        AKRXE020:    Female: 10 to 14 years
+        AKRXE021:    Female: 15 to 17 years
+        AKRXE022:    Female: 18 and 19 years
+        AKRXE023:    Female: 20 to 24 years
+        AKRXE024:    Female: 25 to 29 years
+        AKRXE025:    Female: 30 to 34 years
+        AKRXE026:    Female: 35 to 44 years
+        AKRXE027:    Female: 45 to 54 years
+        AKRXE028:    Female: 55 to 64 years
+        AKRXE029:    Female: 65 to 74 years
+        AKRXE030:    Female: 75 to 84 years
+        AKRXE031:    Female: 85 years and over
+ 
+    Table 4:     Sex by Age (Asian Alone)
+    Universe:    People who are Asian alone
+    Source code: B01001D
+    NHGIS code:  AKRZ
+        AKRZE001:    Total
+        AKRZE002:    Male
+        AKRZE003:    Male: Under 5 years
+        AKRZE004:    Male: 5 to 9 years
+        AKRZE005:    Male: 10 to 14 years
+        AKRZE006:    Male: 15 to 17 years
+        AKRZE007:    Male: 18 and 19 years
+        AKRZE008:    Male: 20 to 24 years
+        AKRZE009:    Male: 25 to 29 years
+        AKRZE010:    Male: 30 to 34 years
+        AKRZE011:    Male: 35 to 44 years
+        AKRZE012:    Male: 45 to 54 years
+        AKRZE013:    Male: 55 to 64 years
+        AKRZE014:    Male: 65 to 74 years
+        AKRZE015:    Male: 75 to 84 years
+        AKRZE016:    Male: 85 years and over
+        AKRZE017:    Female
+        AKRZE018:    Female: Under 5 years
+        AKRZE019:    Female: 5 to 9 years
+        AKRZE020:    Female: 10 to 14 years
+        AKRZE021:    Female: 15 to 17 years
+        AKRZE022:    Female: 18 and 19 years
+        AKRZE023:    Female: 20 to 24 years
+        AKRZE024:    Female: 25 to 29 years
+        AKRZE025:    Female: 30 to 34 years
+        AKRZE026:    Female: 35 to 44 years
+        AKRZE027:    Female: 45 to 54 years
+        AKRZE028:    Female: 55 to 64 years
+        AKRZE029:    Female: 65 to 74 years
+        AKRZE030:    Female: 75 to 84 years
+        AKRZE031:    Female: 85 years and over
+ 
+    Table 5:     Sex by Age (Native Hawaiian and Other Pacific Islander Alone)
+    Universe:    People who are Native Hawaiian and Other Pacific Islander alone
+    Source code: B01001E
+    NHGIS code:  AKR1
+        AKR1E001:    Total
+        AKR1E002:    Male
+        AKR1E003:    Male: Under 5 years
+        AKR1E004:    Male: 5 to 9 years
+        AKR1E005:    Male: 10 to 14 years
+        AKR1E006:    Male: 15 to 17 years
+        AKR1E007:    Male: 18 and 19 years
+        AKR1E008:    Male: 20 to 24 years
+        AKR1E009:    Male: 25 to 29 years
+        AKR1E010:    Male: 30 to 34 years
+        AKR1E011:    Male: 35 to 44 years
+        AKR1E012:    Male: 45 to 54 years
+        AKR1E013:    Male: 55 to 64 years
+        AKR1E014:    Male: 65 to 74 years
+        AKR1E015:    Male: 75 to 84 years
+        AKR1E016:    Male: 85 years and over
+        AKR1E017:    Female
+        AKR1E018:    Female: Under 5 years
+        AKR1E019:    Female: 5 to 9 years
+        AKR1E020:    Female: 10 to 14 years
+        AKR1E021:    Female: 15 to 17 years
+        AKR1E022:    Female: 18 and 19 years
+        AKR1E023:    Female: 20 to 24 years
+        AKR1E024:    Female: 25 to 29 years
+        AKR1E025:    Female: 30 to 34 years
+        AKR1E026:    Female: 35 to 44 years
+        AKR1E027:    Female: 45 to 54 years
+        AKR1E028:    Female: 55 to 64 years
+        AKR1E029:    Female: 65 to 74 years
+        AKR1E030:    Female: 75 to 84 years
+        AKR1E031:    Female: 85 years and over
+ 
+    Table 6:     Sex by Age (Some Other Race Alone)
+    Universe:    People who are Some Other Race alone
+    Source code: B01001F
+    NHGIS code:  AKR3
+        AKR3E001:    Total
+        AKR3E002:    Male
+        AKR3E003:    Male: Under 5 years
+        AKR3E004:    Male: 5 to 9 years
+        AKR3E005:    Male: 10 to 14 years
+        AKR3E006:    Male: 15 to 17 years
+        AKR3E007:    Male: 18 and 19 years
+        AKR3E008:    Male: 20 to 24 years
+        AKR3E009:    Male: 25 to 29 years
+        AKR3E010:    Male: 30 to 34 years
+        AKR3E011:    Male: 35 to 44 years
+        AKR3E012:    Male: 45 to 54 years
+        AKR3E013:    Male: 55 to 64 years
+        AKR3E014:    Male: 65 to 74 years
+        AKR3E015:    Male: 75 to 84 years
+        AKR3E016:    Male: 85 years and over
+        AKR3E017:    Female
+        AKR3E018:    Female: Under 5 years
+        AKR3E019:    Female: 5 to 9 years
+        AKR3E020:    Female: 10 to 14 years
+        AKR3E021:    Female: 15 to 17 years
+        AKR3E022:    Female: 18 and 19 years
+        AKR3E023:    Female: 20 to 24 years
+        AKR3E024:    Female: 25 to 29 years
+        AKR3E025:    Female: 30 to 34 years
+        AKR3E026:    Female: 35 to 44 years
+        AKR3E027:    Female: 45 to 54 years
+        AKR3E028:    Female: 55 to 64 years
+        AKR3E029:    Female: 65 to 74 years
+        AKR3E030:    Female: 75 to 84 years
+        AKR3E031:    Female: 85 years and over
+ 
+    Table 7:     Sex by Age (Two or More Races)
+    Universe:    People who are Two or More Races
+    Source code: B01001G
+    NHGIS code:  AKR5
+        AKR5E001:    Total
+        AKR5E002:    Male
+        AKR5E003:    Male: Under 5 years
+        AKR5E004:    Male: 5 to 9 years
+        AKR5E005:    Male: 10 to 14 years
+        AKR5E006:    Male: 15 to 17 years
+        AKR5E007:    Male: 18 and 19 years
+        AKR5E008:    Male: 20 to 24 years
+        AKR5E009:    Male: 25 to 29 years
+        AKR5E010:    Male: 30 to 34 years
+        AKR5E011:    Male: 35 to 44 years
+        AKR5E012:    Male: 45 to 54 years
+        AKR5E013:    Male: 55 to 64 years
+        AKR5E014:    Male: 65 to 74 years
+        AKR5E015:    Male: 75 to 84 years
+        AKR5E016:    Male: 85 years and over
+        AKR5E017:    Female
+        AKR5E018:    Female: Under 5 years
+        AKR5E019:    Female: 5 to 9 years
+        AKR5E020:    Female: 10 to 14 years
+        AKR5E021:    Female: 15 to 17 years
+        AKR5E022:    Female: 18 and 19 years
+        AKR5E023:    Female: 20 to 24 years
+        AKR5E024:    Female: 25 to 29 years
+        AKR5E025:    Female: 30 to 34 years
+        AKR5E026:    Female: 35 to 44 years
+        AKR5E027:    Female: 45 to 54 years
+        AKR5E028:    Female: 55 to 64 years
+        AKR5E029:    Female: 65 to 74 years
+        AKR5E030:    Female: 75 to 84 years
+        AKR5E031:    Female: 85 years and over
+ 
+    Table 8:     Sex by Age (White Alone, Not Hispanic or Latino)
+    Universe:    White alone, not Hispanic or Latino population
+    Source code: B01001H
+    NHGIS code:  AKR7
+        AKR7E001:    Total
+        AKR7E002:    Male
+        AKR7E003:    Male: Under 5 years
+        AKR7E004:    Male: 5 to 9 years
+        AKR7E005:    Male: 10 to 14 years
+        AKR7E006:    Male: 15 to 17 years
+        AKR7E007:    Male: 18 and 19 years
+        AKR7E008:    Male: 20 to 24 years
+        AKR7E009:    Male: 25 to 29 years
+        AKR7E010:    Male: 30 to 34 years
+        AKR7E011:    Male: 35 to 44 years
+        AKR7E012:    Male: 45 to 54 years
+        AKR7E013:    Male: 55 to 64 years
+        AKR7E014:    Male: 65 to 74 years
+        AKR7E015:    Male: 75 to 84 years
+        AKR7E016:    Male: 85 years and over
+        AKR7E017:    Female
+        AKR7E018:    Female: Under 5 years
+        AKR7E019:    Female: 5 to 9 years
+        AKR7E020:    Female: 10 to 14 years
+        AKR7E021:    Female: 15 to 17 years
+        AKR7E022:    Female: 18 and 19 years
+        AKR7E023:    Female: 20 to 24 years
+        AKR7E024:    Female: 25 to 29 years
+        AKR7E025:    Female: 30 to 34 years
+        AKR7E026:    Female: 35 to 44 years
+        AKR7E027:    Female: 45 to 54 years
+        AKR7E028:    Female: 55 to 64 years
+        AKR7E029:    Female: 65 to 74 years
+        AKR7E030:    Female: 75 to 84 years
+        AKR7E031:    Female: 85 years and over
+ 
+    Table 9:     Race
+    Universe:    Total population
+    Source code: B02001
+    NHGIS code:  AKSM
+        AKSME001:    Total
+        AKSME002:    White alone
+        AKSME003:    Black or African American alone
+        AKSME004:    American Indian and Alaska Native alone
+        AKSME005:    Asian alone
+        AKSME006:    Native Hawaiian and Other Pacific Islander alone
+        AKSME007:    Some other race alone
+        AKSME008:    Two or more races
+        AKSME009:    Two or more races: Two races including Some other race
+        AKSME010:    Two or more races: Two races excluding Some other race, and three or more races
+ 
+Data Type (M):
+    Margins of error
+ 
+        NAME_M:      Area Name
+ 
+    Table 1:     Sex by Age (White Alone)
+    Universe:    People who are White alone
+    Source code: B01001A
+    NHGIS code:  AKRT
+        AKRTM001:    Total
+        AKRTM002:    Male
+        AKRTM003:    Male: Under 5 years
+        AKRTM004:    Male: 5 to 9 years
+        AKRTM005:    Male: 10 to 14 years
+        AKRTM006:    Male: 15 to 17 years
+        AKRTM007:    Male: 18 and 19 years
+        AKRTM008:    Male: 20 to 24 years
+        AKRTM009:    Male: 25 to 29 years
+        AKRTM010:    Male: 30 to 34 years
+        AKRTM011:    Male: 35 to 44 years
+        AKRTM012:    Male: 45 to 54 years
+        AKRTM013:    Male: 55 to 64 years
+        AKRTM014:    Male: 65 to 74 years
+        AKRTM015:    Male: 75 to 84 years
+        AKRTM016:    Male: 85 years and over
+        AKRTM017:    Female
+        AKRTM018:    Female: Under 5 years
+        AKRTM019:    Female: 5 to 9 years
+        AKRTM020:    Female: 10 to 14 years
+        AKRTM021:    Female: 15 to 17 years
+        AKRTM022:    Female: 18 and 19 years
+        AKRTM023:    Female: 20 to 24 years
+        AKRTM024:    Female: 25 to 29 years
+        AKRTM025:    Female: 30 to 34 years
+        AKRTM026:    Female: 35 to 44 years
+        AKRTM027:    Female: 45 to 54 years
+        AKRTM028:    Female: 55 to 64 years
+        AKRTM029:    Female: 65 to 74 years
+        AKRTM030:    Female: 75 to 84 years
+        AKRTM031:    Female: 85 years and over
+ 
+    Table 2:     Sex by Age (Black or African American Alone)
+    Universe:    Black or African American alone
+    Source code: B01001B
+    NHGIS code:  AKRV
+        AKRVM001:    Total
+        AKRVM002:    Male
+        AKRVM003:    Male: Under 5 years
+        AKRVM004:    Male: 5 to 9 years
+        AKRVM005:    Male: 10 to 14 years
+        AKRVM006:    Male: 15 to 17 years
+        AKRVM007:    Male: 18 and 19 years
+        AKRVM008:    Male: 20 to 24 years
+        AKRVM009:    Male: 25 to 29 years
+        AKRVM010:    Male: 30 to 34 years
+        AKRVM011:    Male: 35 to 44 years
+        AKRVM012:    Male: 45 to 54 years
+        AKRVM013:    Male: 55 to 64 years
+        AKRVM014:    Male: 65 to 74 years
+        AKRVM015:    Male: 75 to 84 years
+        AKRVM016:    Male: 85 years and over
+        AKRVM017:    Female
+        AKRVM018:    Female: Under 5 years
+        AKRVM019:    Female: 5 to 9 years
+        AKRVM020:    Female: 10 to 14 years
+        AKRVM021:    Female: 15 to 17 years
+        AKRVM022:    Female: 18 and 19 years
+        AKRVM023:    Female: 20 to 24 years
+        AKRVM024:    Female: 25 to 29 years
+        AKRVM025:    Female: 30 to 34 years
+        AKRVM026:    Female: 35 to 44 years
+        AKRVM027:    Female: 45 to 54 years
+        AKRVM028:    Female: 55 to 64 years
+        AKRVM029:    Female: 65 to 74 years
+        AKRVM030:    Female: 75 to 84 years
+        AKRVM031:    Female: 85 years and over
+ 
+    Table 3:     Sex by Age (American Indian and Alaska Native Alone)
+    Universe:    People who are American Indian and Alaska Native alone
+    Source code: B01001C
+    NHGIS code:  AKRX
+        AKRXM001:    Total
+        AKRXM002:    Male
+        AKRXM003:    Male: Under 5 years
+        AKRXM004:    Male: 5 to 9 years
+        AKRXM005:    Male: 10 to 14 years
+        AKRXM006:    Male: 15 to 17 years
+        AKRXM007:    Male: 18 and 19 years
+        AKRXM008:    Male: 20 to 24 years
+        AKRXM009:    Male: 25 to 29 years
+        AKRXM010:    Male: 30 to 34 years
+        AKRXM011:    Male: 35 to 44 years
+        AKRXM012:    Male: 45 to 54 years
+        AKRXM013:    Male: 55 to 64 years
+        AKRXM014:    Male: 65 to 74 years
+        AKRXM015:    Male: 75 to 84 years
+        AKRXM016:    Male: 85 years and over
+        AKRXM017:    Female
+        AKRXM018:    Female: Under 5 years
+        AKRXM019:    Female: 5 to 9 years
+        AKRXM020:    Female: 10 to 14 years
+        AKRXM021:    Female: 15 to 17 years
+        AKRXM022:    Female: 18 and 19 years
+        AKRXM023:    Female: 20 to 24 years
+        AKRXM024:    Female: 25 to 29 years
+        AKRXM025:    Female: 30 to 34 years
+        AKRXM026:    Female: 35 to 44 years
+        AKRXM027:    Female: 45 to 54 years
+        AKRXM028:    Female: 55 to 64 years
+        AKRXM029:    Female: 65 to 74 years
+        AKRXM030:    Female: 75 to 84 years
+        AKRXM031:    Female: 85 years and over
+ 
+    Table 4:     Sex by Age (Asian Alone)
+    Universe:    People who are Asian alone
+    Source code: B01001D
+    NHGIS code:  AKRZ
+        AKRZM001:    Total
+        AKRZM002:    Male
+        AKRZM003:    Male: Under 5 years
+        AKRZM004:    Male: 5 to 9 years
+        AKRZM005:    Male: 10 to 14 years
+        AKRZM006:    Male: 15 to 17 years
+        AKRZM007:    Male: 18 and 19 years
+        AKRZM008:    Male: 20 to 24 years
+        AKRZM009:    Male: 25 to 29 years
+        AKRZM010:    Male: 30 to 34 years
+        AKRZM011:    Male: 35 to 44 years
+        AKRZM012:    Male: 45 to 54 years
+        AKRZM013:    Male: 55 to 64 years
+        AKRZM014:    Male: 65 to 74 years
+        AKRZM015:    Male: 75 to 84 years
+        AKRZM016:    Male: 85 years and over
+        AKRZM017:    Female
+        AKRZM018:    Female: Under 5 years
+        AKRZM019:    Female: 5 to 9 years
+        AKRZM020:    Female: 10 to 14 years
+        AKRZM021:    Female: 15 to 17 years
+        AKRZM022:    Female: 18 and 19 years
+        AKRZM023:    Female: 20 to 24 years
+        AKRZM024:    Female: 25 to 29 years
+        AKRZM025:    Female: 30 to 34 years
+        AKRZM026:    Female: 35 to 44 years
+        AKRZM027:    Female: 45 to 54 years
+        AKRZM028:    Female: 55 to 64 years
+        AKRZM029:    Female: 65 to 74 years
+        AKRZM030:    Female: 75 to 84 years
+        AKRZM031:    Female: 85 years and over
+ 
+    Table 5:     Sex by Age (Native Hawaiian and Other Pacific Islander Alone)
+    Universe:    People who are Native Hawaiian and Other Pacific Islander alone
+    Source code: B01001E
+    NHGIS code:  AKR1
+        AKR1M001:    Total
+        AKR1M002:    Male
+        AKR1M003:    Male: Under 5 years
+        AKR1M004:    Male: 5 to 9 years
+        AKR1M005:    Male: 10 to 14 years
+        AKR1M006:    Male: 15 to 17 years
+        AKR1M007:    Male: 18 and 19 years
+        AKR1M008:    Male: 20 to 24 years
+        AKR1M009:    Male: 25 to 29 years
+        AKR1M010:    Male: 30 to 34 years
+        AKR1M011:    Male: 35 to 44 years
+        AKR1M012:    Male: 45 to 54 years
+        AKR1M013:    Male: 55 to 64 years
+        AKR1M014:    Male: 65 to 74 years
+        AKR1M015:    Male: 75 to 84 years
+        AKR1M016:    Male: 85 years and over
+        AKR1M017:    Female
+        AKR1M018:    Female: Under 5 years
+        AKR1M019:    Female: 5 to 9 years
+        AKR1M020:    Female: 10 to 14 years
+        AKR1M021:    Female: 15 to 17 years
+        AKR1M022:    Female: 18 and 19 years
+        AKR1M023:    Female: 20 to 24 years
+        AKR1M024:    Female: 25 to 29 years
+        AKR1M025:    Female: 30 to 34 years
+        AKR1M026:    Female: 35 to 44 years
+        AKR1M027:    Female: 45 to 54 years
+        AKR1M028:    Female: 55 to 64 years
+        AKR1M029:    Female: 65 to 74 years
+        AKR1M030:    Female: 75 to 84 years
+        AKR1M031:    Female: 85 years and over
+ 
+    Table 6:     Sex by Age (Some Other Race Alone)
+    Universe:    People who are Some Other Race alone
+    Source code: B01001F
+    NHGIS code:  AKR3
+        AKR3M001:    Total
+        AKR3M002:    Male
+        AKR3M003:    Male: Under 5 years
+        AKR3M004:    Male: 5 to 9 years
+        AKR3M005:    Male: 10 to 14 years
+        AKR3M006:    Male: 15 to 17 years
+        AKR3M007:    Male: 18 and 19 years
+        AKR3M008:    Male: 20 to 24 years
+        AKR3M009:    Male: 25 to 29 years
+        AKR3M010:    Male: 30 to 34 years
+        AKR3M011:    Male: 35 to 44 years
+        AKR3M012:    Male: 45 to 54 years
+        AKR3M013:    Male: 55 to 64 years
+        AKR3M014:    Male: 65 to 74 years
+        AKR3M015:    Male: 75 to 84 years
+        AKR3M016:    Male: 85 years and over
+        AKR3M017:    Female
+        AKR3M018:    Female: Under 5 years
+        AKR3M019:    Female: 5 to 9 years
+        AKR3M020:    Female: 10 to 14 years
+        AKR3M021:    Female: 15 to 17 years
+        AKR3M022:    Female: 18 and 19 years
+        AKR3M023:    Female: 20 to 24 years
+        AKR3M024:    Female: 25 to 29 years
+        AKR3M025:    Female: 30 to 34 years
+        AKR3M026:    Female: 35 to 44 years
+        AKR3M027:    Female: 45 to 54 years
+        AKR3M028:    Female: 55 to 64 years
+        AKR3M029:    Female: 65 to 74 years
+        AKR3M030:    Female: 75 to 84 years
+        AKR3M031:    Female: 85 years and over
+ 
+    Table 7:     Sex by Age (Two or More Races)
+    Universe:    People who are Two or More Races
+    Source code: B01001G
+    NHGIS code:  AKR5
+        AKR5M001:    Total
+        AKR5M002:    Male
+        AKR5M003:    Male: Under 5 years
+        AKR5M004:    Male: 5 to 9 years
+        AKR5M005:    Male: 10 to 14 years
+        AKR5M006:    Male: 15 to 17 years
+        AKR5M007:    Male: 18 and 19 years
+        AKR5M008:    Male: 20 to 24 years
+        AKR5M009:    Male: 25 to 29 years
+        AKR5M010:    Male: 30 to 34 years
+        AKR5M011:    Male: 35 to 44 years
+        AKR5M012:    Male: 45 to 54 years
+        AKR5M013:    Male: 55 to 64 years
+        AKR5M014:    Male: 65 to 74 years
+        AKR5M015:    Male: 75 to 84 years
+        AKR5M016:    Male: 85 years and over
+        AKR5M017:    Female
+        AKR5M018:    Female: Under 5 years
+        AKR5M019:    Female: 5 to 9 years
+        AKR5M020:    Female: 10 to 14 years
+        AKR5M021:    Female: 15 to 17 years
+        AKR5M022:    Female: 18 and 19 years
+        AKR5M023:    Female: 20 to 24 years
+        AKR5M024:    Female: 25 to 29 years
+        AKR5M025:    Female: 30 to 34 years
+        AKR5M026:    Female: 35 to 44 years
+        AKR5M027:    Female: 45 to 54 years
+        AKR5M028:    Female: 55 to 64 years
+        AKR5M029:    Female: 65 to 74 years
+        AKR5M030:    Female: 75 to 84 years
+        AKR5M031:    Female: 85 years and over
+ 
+    Table 8:     Sex by Age (White Alone, Not Hispanic or Latino)
+    Universe:    White alone, not Hispanic or Latino population
+    Source code: B01001H
+    NHGIS code:  AKR7
+        AKR7M001:    Total
+        AKR7M002:    Male
+        AKR7M003:    Male: Under 5 years
+        AKR7M004:    Male: 5 to 9 years
+        AKR7M005:    Male: 10 to 14 years
+        AKR7M006:    Male: 15 to 17 years
+        AKR7M007:    Male: 18 and 19 years
+        AKR7M008:    Male: 20 to 24 years
+        AKR7M009:    Male: 25 to 29 years
+        AKR7M010:    Male: 30 to 34 years
+        AKR7M011:    Male: 35 to 44 years
+        AKR7M012:    Male: 45 to 54 years
+        AKR7M013:    Male: 55 to 64 years
+        AKR7M014:    Male: 65 to 74 years
+        AKR7M015:    Male: 75 to 84 years
+        AKR7M016:    Male: 85 years and over
+        AKR7M017:    Female
+        AKR7M018:    Female: Under 5 years
+        AKR7M019:    Female: 5 to 9 years
+        AKR7M020:    Female: 10 to 14 years
+        AKR7M021:    Female: 15 to 17 years
+        AKR7M022:    Female: 18 and 19 years
+        AKR7M023:    Female: 20 to 24 years
+        AKR7M024:    Female: 25 to 29 years
+        AKR7M025:    Female: 30 to 34 years
+        AKR7M026:    Female: 35 to 44 years
+        AKR7M027:    Female: 45 to 54 years
+        AKR7M028:    Female: 55 to 64 years
+        AKR7M029:    Female: 65 to 74 years
+        AKR7M030:    Female: 75 to 84 years
+        AKR7M031:    Female: 85 years and over
+ 
+    Table 9:     Race
+    Universe:    Total population
+    Source code: B02001
+    NHGIS code:  AKSM
+        AKSMM001:    Total
+        AKSMM002:    White alone
+        AKSMM003:    Black or African American alone
+        AKSMM004:    American Indian and Alaska Native alone
+        AKSMM005:    Asian alone
+        AKSMM006:    Native Hawaiian and Other Pacific Islander alone
+        AKSMM007:    Some other race alone
+        AKSMM008:    Two or more races
+        AKSMM009:    Two or more races: Two races including Some other race
+        AKSMM010:    Two or more races: Two races excluding Some other race, and three or more races
+ 
+--------------------------------------------------------------------------------
+Citation and Use of NHGIS Data
+--------------------------------------------------------------------------------
+ 
+All persons are granted a limited license to use this documentation and the
+accompanying data, subject to the following conditions:
+
+* REDISTRIBUTION: You will not redistribute the data without permission.
+
+  You may publish a subset of the data to meet journal requirements for accessing 
+  data related to a particular publication. Contact us for permission for any other 
+  redistribution; we will consider requests for free and commercial redistribution.
+
+* CITATION: You will cite NHGIS appropriately.
+
+    * Publications and research reports employing NHGIS data (either tabular or GIS) 
+      should include the following citation:
+
+        Steven Manson, Jonathan Schroeder, David Van Riper, Katherine Knowles, Tracy Kugler, Finn Roberts, and Steven Ruggles.
+        IPUMS National Historical Geographic Information System: Version 18.0 
+        [dataset]. Minneapolis, MN: IPUMS. 2023.
+        http://doi.org/10.18128/D050.V18.0
+
+    * For policy briefs, online resources, or articles in the popular press, we 
+      recommend that you cite the use of NHGIS data as follows:
+
+        IPUMS NHGIS, University of Minnesota, www.nhgis.org.
+
+These terms of use are a legally binding agreement. You can use the data only in 
+accordance with these terms, and any other use is a violation of the agreement. 
+Violations may result in revocation of the agreement and prohibition from using other 
+IPUMS data. If IPUMS or our partners are harmed from your violation, you are 
+responsible for all damages, including reasonable attorney's fees and expenses.
+        
+In addition, we request that users send us a copy of any publications, research
+reports, or educational material making use of the data or documentation.
+
+Send electronic material to: nhgis@umn.edu
+
+Printed matter should be sent to:
+
+    IPUMS NHGIS
+    Institute for Social Research and Data Innovation
+    University of Minnesota
+    50 Willey Hall
+    225 19th Ave S
+    Minneapolis, MN 55455

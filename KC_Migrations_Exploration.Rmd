@@ -18,6 +18,7 @@ library(stringr)
 library(data.table)
 library(tree)
 library(keras)
+library(terra)
 ```
 
 ACS migration data from ACS `tidycensus` package. County population, race, age, sex data from NHGIS.
@@ -252,6 +253,49 @@ create_county_flows <- function(year) {
   return(king_county_comp)
 }
 ```
+
+```{r}
+#test <- get_pums(variables = "NP", year = 2019, state = "WA", survey = "acs1", recode = TRUE)
+
+race_vars <- c(
+  Hispanic = "P2_002N",
+  White = "P2_005N",
+  Black = "P2_006N",
+  Asian = "P2_008N"
+)
+
+sea_race <- get_decennial(
+  geography = "tract",
+  variables = race_vars,
+  state = "WA",
+  county = "King County",
+  geometry = TRUE,
+  year = 2020
+)
+
+sea_dots <- as_dot_density(
+  sea_race,
+  value = "value",
+  values_per_dot = 100,
+  group = "variable"
+)
+
+sea_base <- sea_race[sea_race$variable == "Hispanic",]
+
+ggplot() +
+  geom_sf(data = sea_base,
+          fill = 'white',
+          color = 'grey') +
+  geom_sf(data = sea_dots,
+          aes(color = variable),
+          size = 0.05) +
+  theme_void()
+# define a function to gather median income, other socioeconomic data
+#create_socioecon_data <- function(year) {
+  
+#}
+```
+
 
 ```{r}
 # define a function to calculate percentages of each race given dataset

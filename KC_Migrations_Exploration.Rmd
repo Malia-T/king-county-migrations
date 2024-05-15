@@ -6,22 +6,32 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+# data manipulation and reading
 library(dplyr)
 library(tidyverse)
 library(tidyr)
-library(readxl)
-library(stats)
-library(tidycensus)
-library(ggplot2)
-library(sf)
 library(stringr)
 library(data.table)
-library(tree)
-library(keras)
+library(readxl)
+
+# statistics
+library(stats)
+
+# mapping and plotting
+library(ggplot2)
 library(terra)
 library(mapdeck)
+library(sf)
+
+# modeling
+library(tree)
+library(keras)
+
+# extracting survey/IPUMS/census data
 library(survey)
 library(srvyr)
+library(ipumsr)
+library(tidycensus)
 ```
 
 ACS migration data from ACS `tidycensus` package. County population, race, age, sex data from NHGIS.
@@ -267,6 +277,7 @@ head(sea_flows_2015)
 head(sea_flows_2020)
 ```
 
+### Trying out mapdeck/mapbox
 ```{r}
 # try out mapdeck
 ## data wrangling
@@ -325,6 +336,7 @@ top_move_out %>%
             css = "color: black;"))
 ```
 
+Much more widespread migration patterns from 2015 to 2020.
 
 ```{r}
 # calculate race percentages and supplement data
@@ -344,6 +356,13 @@ race_test <- get_acs(geography = "county", variables = c("B02001_001", "B02001_0
 
 sum(is.na(race_test$B02001_003E)) 
 ```
+
+### Trying out ipumsr package functions
+```{r}
+
+```
+
+
 ## Functions
 ```{r}
 # define functions to clean and join data given year

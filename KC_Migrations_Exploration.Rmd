@@ -36,6 +36,16 @@ library(tidycensus)
 
 ACS migration data from ACS `tidycensus` package. County population, race, age, sex data from NHGIS.
 
+## Variables
+- Tidycensus
+  - 
+```{r}
+v20 <- load_variables(2020, "acs5", cache = TRUE)
+
+View(v20)
+```
+
+
 ## Load in Data
 ```{r}
 # all data from ACS. Data analyzed is from 2019
@@ -357,7 +367,7 @@ race_test <- get_acs(geography = "county", variables = c("B02001_001", "B02001_0
 sum(is.na(race_test$B02001_003E)) 
 ```
 
-### Trying out ipumsr package functions
+### Trying out ipumsr package functions with tidycensus
 ```{r}
 median_hou_msa_2019 <- read_nhgis("data/nhgis0004_csv/nhgis0004_ds243_2019_metdiv.csv")
 
@@ -372,6 +382,17 @@ mig <- get_flows(
 )
 
 head(mig)
+
+sea_tac_bell_flows <- mig %>% 
+  select(-moe) %>% 
+  filter(FULL1_NAME == "Seattle-Tacoma-Bellevue, WA Metro Area")
+
+head(sea_tac_bell_flows)
+
+# load in time series data for race (1990, 2000, 2010, 2020)
+race_change_1990_2020_cbsa <- read_nhgis("data/nhgis0005_csv/nhgis0005_csv/nhgis0005_ts_geog2010_cbsa.csv")
+
+head(race_change_1990_2020_cbsa)
 ```
 
 
@@ -466,6 +487,7 @@ pct.2019 <- calc_percentages(dat.2019)
 # differences calculated by King County - each county
 diffs <- calc_differences(pct.2019)
 ```
+
 ## EDA
 
 ```{r}

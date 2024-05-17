@@ -500,6 +500,7 @@ ggplot(data = mod.data, mapping = aes(x = movers)) +
 ```
 
 ```{r}
+# TODO: CREATE FUNCTION FOR THIS PROCESS
 # movers by race
 movers_by_race_2015 <- sea_flows_2015 %>% 
   filter(variable == "MOVEDOUT") %>% 

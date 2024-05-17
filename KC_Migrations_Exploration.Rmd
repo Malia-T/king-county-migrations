@@ -253,7 +253,8 @@ ggplot() +
           aes(color = variable),
           size = 1) +
   theme_void()
-# define a function to gather median income, other socioeconomic data
+
+# TODO: define a function to gather median income, other socioeconomic data
 #create_socioecon_data <- function(year) {
   
 #}

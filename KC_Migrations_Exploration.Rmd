@@ -34,7 +34,7 @@ library(ipumsr)
 library(tidycensus)
 ```
 
-ACS migration data from ACS `tidycensus` package. County population, race, age, sex data from NHGIS IPUMS.
+Migration, race, and total population data from ACS via the `tidycensus` package. Median house value data from from NHGIS IPUMS.
 
 ## Variables
 - Tidycensus
@@ -397,6 +397,56 @@ race_change_1990_2020_cbsa <- read_nhgis("data/nhgis0005_csv/nhgis0005_csv/nhgis
 head(race_change_1990_2020_cbsa)
 ```
 
+```{r}
+# TODO: CREATE FUNCTION FOR THIS PROCESS
+# movers by race
+movers_by_race_2015 <- sea_flows_2015 %>% 
+  filter(variable == "MOVEDOUT") %>% 
+  filter(RACE_label != "All races") %>% 
+  select(c(RACE_label, variable, estimate))
+
+head(movers_by_race_2015)
+
+total_movers_race <- movers_by_race_2015 %>% 
+  group_by(RACE_label) %>% 
+  summarize(n = sum(estimate, na.rm = TRUE))
+
+ggplot(data = total_movers_race, mapping = aes(x = RACE_label, y = n)) +
+  geom_histogram(na.rm = TRUE, stat = "sum")
+
+# B02001_002: White alone
+# B02001_003: Black or African American alone
+# B02001_005: Asian alone
+# B02001_009: Two or more and other
+# TODO: percent movers by race
+data <- get_acs(year = 2015, variables = c("B02001_002", "B02001_003", "B02001_005", "B02001_009"), geography = "metropolitan statistical area/micropolitan statistical area")
+
+total_pops_2015 <- data %>% 
+  filter(NAME == "Seattle-Tacoma-Bellevue, WA Metro Area")
+
+total_pops_2015 <- total_pops_2015 %>% mutate(
+  race = case_when(
+    variable == "B02001_002" ~ "White alone",
+    variable == "B02001_003" ~ "Black or African American alone",
+    variable == "B02001_005" ~ "Asian alone",
+    variable == "B02001_009" ~ "Other race alone or Two or more races",
+    .default = "other"
+))
+
+head(total_pops_2015)
+
+# join pops and movers
+pops_movers_2015 <- merge(total_pops_2015, total_movers_race, by.x = "race", by.y = "RACE_label") %>% 
+  select(-variable)
+
+head(pops_movers_2015)
+
+pops_movers_2015$pct_movers <- pops_movers_2015$n / pops_movers_2015$estimate
+
+ggplot(data = pops_movers_2015, mapping = aes(x = race, y = pct_movers)) +
+  geom_histogram(na.rm = TRUE, stat = "sum")
+```
+While there are more white movers (way outnumber other classes), the percent of people in the "two or more/other" category that are moving out of Seattle-Tacoma-Bellevue vastly outnumbers the other race categories.
 
 ## Functions
 ```{r}
@@ -492,64 +542,6 @@ diffs <- calc_differences(pct.2019)
 
 ## EDA
 
-```{r}
-# distribution of movers
-# mostly 0
-ggplot(data = mod.data, mapping = aes(x = movers)) +
-  geom_histogram()
-```
-
-```{r}
-# TODO: CREATE FUNCTION FOR THIS PROCESS
-# movers by race
-movers_by_race_2015 <- sea_flows_2015 %>% 
-  filter(variable == "MOVEDOUT") %>% 
-  filter(RACE_label != "All races") %>% 
-  select(c(RACE_label, variable, estimate))
-
-head(movers_by_race_2015)
-
-total_movers_race <- movers_by_race_2015 %>% 
-  group_by(RACE_label) %>% 
-  summarize(n = sum(estimate, na.rm = TRUE))
-
-ggplot(data = total_movers_race, mapping = aes(x = RACE_label, y = n)) +
-  geom_histogram(na.rm = TRUE, stat = "sum")
-
-# B02001_002: White alone
-# B02001_003: Black or African American alone
-# B02001_005: Asian alone
-# B02001_009: Two or more and other
-# TODO: percent movers by race
-data <- get_acs(year = 2015, variables = c("B02001_002", "B02001_003", "B02001_005", "B02001_009"), geography = "metropolitan statistical area/micropolitan statistical area")
-
-total_pops_2015 <- data %>% 
-  filter(NAME == "Seattle-Tacoma-Bellevue, WA Metro Area")
-
-total_pops_2015 <- total_pops_2015 %>% mutate(
-  race = case_when(
-    variable == "B02001_002" ~ "White alone",
-    variable == "B02001_003" ~ "Black or African American alone",
-    variable == "B02001_005" ~ "Asian alone",
-    variable == "B02001_009" ~ "Other race alone or Two or more races",
-    .default = "other"
-))
-
-head(total_pops_2015)
-
-# join pops and movers
-pops_movers_2015 <- merge(total_pops_2015, total_movers_race, by.x = "race", by.y = "RACE_label") %>% 
-  select(-variable)
-
-head(pops_movers_2015)
-
-pops_movers_2015$pct_movers <- pops_movers_2015$n / pops_movers_2015$estimate
-
-ggplot(data = pops_movers_2015, mapping = aes(x = race, y = pct_movers)) +
-  geom_histogram(na.rm = TRUE, stat = "sum")
-```
-While there are more white movers (way outnumber other classes), the percent of people in the "two or more/other" category that are moving out of Seattle-Tacoma-Bellevue vastly outnumbers the other race categories.
-
 ## Tests
 ```{r}
 # relationship between race and whether someone has moved?
@@ -621,24 +613,29 @@ diffs <- diffs %>%
   filter(county_name != "King County, Washington")
 ```
 
-
 ```{r}
 # select data
-data <- diffs %>% 
+dat <- diffs %>% 
   select(c(county_name, movers, diff_pct_white_alone, diff_pct_black_alone,
            diff_pct_amer_ind_ak_alone, diff_pct_asian_alone,
            diff_pct_nat_haw_pac_alone, diff_pct_other_alone,
            diff_pct_two_plus))
 
-mod.data <- data %>% 
+mod.data <- dat %>% 
   select(c(movers, diff_pct_white_alone, diff_pct_black_alone,
            diff_pct_amer_ind_ak_alone, diff_pct_asian_alone,
            diff_pct_nat_haw_pac_alone, diff_pct_other_alone,
            diff_pct_two_plus))
 
-y <- data$movers
+y <- dat$movers
 ```
 
+```{r}
+# distribution of movers
+# mostly 0
+ggplot(data = mod.data, mapping = aes(x = movers)) +
+  geom_histogram()
+```
 
 ```{r}
 set.seed(2)
@@ -687,5 +684,17 @@ summary(basic.lin.mod)
 
 ```{r}
 # TODO: compare acs1, acs3, acs5 results?
+```
+
+```{r}
+# TODO: are there more movers to areas where race proportions are shifting?
+```
+
+```{r}
+# TODO: construct probability of moving distributions via ecological inference (black vs non-black, white vs non-white)
+```
+
+```{r}
+# TODO: after constructing the probability distributions, consider what the implications are given the change in demographics
 ```
 

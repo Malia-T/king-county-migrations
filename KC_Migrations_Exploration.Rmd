@@ -269,7 +269,7 @@ ggplot() +
 ```{r}
 sea_flows_2015 <- get_flows(
   geography = "metropolitan statistical area",
-  breakdown = "RACE",
+  #breakdown = "RACE",
   breakdown_labels = TRUE,
   msa = 42660,
   year = 2015,

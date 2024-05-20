@@ -43,6 +43,9 @@ Migration, race, and total population data from ACS via the `tidycensus` package
 v20 <- load_variables(2020, "acs5", cache = TRUE)
 
 View(v20)
+
+# Seattle-Tacoma-Bellevue
+# MSA FIPS: 42660
 ```
 
 
@@ -79,6 +82,17 @@ head(acs_county_flows.2019)
 ## AKSME010: Two or more races: Two races excluding Some other race, and three or more races
 acs_char_2019 <- read.csv("data/nhgis_sex_race.csv")
 
+
+#### TIME SERIES DATA ####
+# race composition of MSAs from 1990 to 2020
+
+# geography standardized to 2010 geography
+race_ts <- read_nhgis("data/nhgis0005_csv/nhgis0005_csv/nhgis0005_ts_geog2010_cbsa.csv")
+head(race_ts)
+
+race_1990_2020_codebook <- read_nhgis_codebook("data/nhgis0005_csv/nhgis0005_csv/", file_select = "nhgis0005_ts_geog2010_cbsa_codebook.txt")
+
+race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)
 ```
 
 ## Data Wrangling
@@ -121,6 +135,26 @@ county_race <- acs_char_2019 %>%
 setnames(county_race, old=c("NAME_E", "AKSME001", "AKSME002", "AKSME003", "AKSME004", "AKSME005", "AKSME006", "AKSME007", "AKSME008", "AKSME009", "AKSME010"), new=c("county_name", "total", "white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus_alone", "two_some_other", "two_ex_some_three_plus"))
 
 head(county_race)
+
+##### TIME SERIES DATA #####
+# race data from 1990 to 2020
+print(ipums_var_info(race_ts))
+
+# only select estimate for each race
+race_1990_2020 <- race_ts %>% 
+  select(c(GISJOIN, GEOGYEAR, CBSA, 
+           CM1AA1990, CM1AA2000, CM1AA2010, CM1AA2020,
+           CM1AB1990, CM1AB2000, CM1AB2010, CM1AB2020,
+           CM1AC1990, CM1AC2000, CM1AC2010, CM1AC2020,
+           CM1AD1990, CM1AD2000, CM1AD2010, CM1AD2020,
+           CM1AE1990, CM1AE2000, CM1AE2010, CM1AE2020,
+           CM1AF1990, CM1AF2000, CM1AF2010, CM1AF2020,
+           CM1AG1990, CM1AG2000, CM1AG2010, CM1AG2020))
+
+head(race_1990_2020)
+
+##### Calculate change over time for each group
+
 ```
 
 
@@ -347,13 +381,14 @@ top_move_out %>%
             css = "color: black;"))
 ```
 
-Much more widespread migration patterns from 2015 to 2020.
+Patterns are relatively comparable between 2015 and 2020.
 
 ```{r}
 # calculate race percentages and supplement data
 # remove "conflicting" race categories
 county_race[is.na(county_race$total),]
 ```
+
 ```{r}
 # input ACS characteristics for missing counties
 # exclude the categories that feed into "two plus"
@@ -399,6 +434,15 @@ head(race_change_1990_2020_cbsa)
 ```{r}
 # TODO: CREATE FUNCTION FOR THIS PROCESS
 # movers by race
+sea_flows_2015 <- get_flows(
+  geography = "metropolitan statistical area",
+  breakdown = "RACE",
+  breakdown_labels = TRUE,
+  msa = 42660,
+  year = 2015,
+  geometry = TRUE
+)
+
 movers_by_race_2015 <- sea_flows_2015 %>% 
   filter(variable == "MOVEDOUT") %>% 
   filter(RACE_label != "All races") %>% 

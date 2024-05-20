@@ -290,8 +290,6 @@ head(sea_flows_2020)
 
 ### Trying out mapdeck/mapbox
 ```{r}
-set_token("pk.eyJ1IjoibWFsaWFqYyIsImEiOiJjazNxYzBkZXgwMDMwM2VxdXZtanZwM2t3In0.It8ATez8CuG6PlSeu9-SUQ")
-
 # try out mapdeck
 ## data wrangling
 top_move_out <- sea_flows_2015 %>% 

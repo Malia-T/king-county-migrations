@@ -91,8 +91,6 @@ race_ts <- read_nhgis("data/nhgis0005_csv/nhgis0005_csv/nhgis0005_ts_geog2010_cb
 head(race_ts)
 
 race_1990_2020_codebook <- read_nhgis_codebook("data/nhgis0005_csv/nhgis0005_csv/", file_select = "nhgis0005_ts_geog2010_cbsa_codebook.txt")
-
-race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)
 ```
 
 ## Data Wrangling
@@ -137,6 +135,7 @@ setnames(county_race, old=c("NAME_E", "AKSME001", "AKSME002", "AKSME003", "AKSME
 head(county_race)
 
 ##### TIME SERIES DATA #####
+race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)
 # race data from 1990 to 2020
 print(ipums_var_info(race_ts))
 
@@ -153,8 +152,29 @@ race_1990_2020 <- race_ts %>%
 
 head(race_1990_2020)
 
-##### Calculate change over time for each group
-
+#### Calculate change over time for each group ####
+## consider getting rid of 1990 - 2000: from a while ago
+## starting in 2000 census, people could mark themselves as multiracial also ^
+race_2000_2020 <- race_1990_2020 %>% 
+  mutate(chg_white_2000_2010 = CM1AA2010 - CM1AA2000,
+         chg_white_2010_2020 = CM1AA2020 - CM1AA2010,
+         chg_black_2000_2010 = CM1AB2010 - CM1AB2000,
+         chg_black_2010_2020 = CM1AB2020 - CM1AB2010,
+         chg_aiak_2000_2010 = CM1AC2010 - CM1AC2000,
+         chg_aiak_2010_2020 = CM1AC2020 - CM1AC2010,
+         chg_asian_2000_2010 = CM1AD2010 - CM1AD2000,
+         chg_asian_2010_2020 = CM1AD2020 - CM1AD2010,
+         chg_nhpi_2000_2010 = CM1AE2010 - CM1AE2000,
+         chg_nhpi_2010_2020 = CM1AE2020 - CM1AE2010,
+         chg_other_2000_2010 = CM1AF2010 - CM1AF2000,
+         chg_other_2010_2020 = CM1AF2020 - CM1AF2010,
+         chg_twoplus_2000_2010 = CM1AG2010 - CM1AG2000,
+         chg_twoplus_2010_2020 = CM1AG2020 - CM1AG2010) %>% 
+  select(c(GISJOIN, CBSA, chg_white_2000_2010, chg_white_2010_2020, chg_black_2000_2010,
+           chg_black_2010_2020, chg_aiak_2000_2010, chg_aiak_2010_2020,
+           chg_asian_2000_2010, chg_asian_2010_2020, chg_nhpi_2000_2010,
+           chg_nhpi_2010_2020, chg_other_2000_2010, chg_other_2010_2020,
+           chg_twoplus_2000_2010, chg_twoplus_2010_2020))
 ```
 
 

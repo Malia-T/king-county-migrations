@@ -575,7 +575,17 @@ plot(tree.pcts)
 text(tree.pcts, pretty = 0)
 ```
 ```{r}
+tree.pred <- predict(tree.pcts, newdata = pcts.test)
 
+mse <- mean((pcts.test$estimate - tree.pred)^2)
+rmse <- sqrt(mse)
+mae <- mean(abs(pcts.test$estimate - tree.pred))
+mape <- mean(abs((pcts.test$estimate - tree.pred) / pcts.test$estimate)) * 100
+
+r_squared <- 1 - sum((pcts.test$estimate - tree.pred)^2) / sum((pcts.test$estimate - mean(pcts.test$estimate))^2)
+
+# pretty ok for just a single tree...
+print(paste("MSE", mse, "RMSE", rmse, "MAE", mae, "MAPE", mape, "R-squared", r_squared))
 ```
 
 

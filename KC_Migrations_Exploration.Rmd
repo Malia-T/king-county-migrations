@@ -51,6 +51,7 @@ View(v20)
 
 ## Load in Data
 ```{r}
+#### OLD #### 
 # all data from ACS. Data analyzed is from 2019
 # try to load in demographics at some point with "breakdown"
 acs_county_flows.2019 <- get_flows(geography = "county",
@@ -95,6 +96,7 @@ race_1990_2020_codebook <- read_nhgis_codebook("data/nhgis0005_csv/nhgis0005_csv
 
 ## Data Wrangling
 ```{r}
+#### OLD ####
 # select name and population
 county_pops_2019 <- dat %>% 
   select(c(NAME_M, AKSLE001))
@@ -115,6 +117,7 @@ kc_movers_2019 <- kc_flows_2019 %>%
 head(kc_movers_2019)
 ```
 ```{r}
+#### OLD ####
 ## AKSME001: total
 ## AKSME002: White alone
 ## AKSME003: Black or African American alone
@@ -134,8 +137,10 @@ setnames(county_race, old=c("NAME_E", "AKSME001", "AKSME002", "AKSME003", "AKSME
 
 head(county_race)
 
+
 ##### Housing Data #####
-med_housing <- read_nhgis("data/nhgis0004_csv/nhgis0004_ds243_2019_metdiv.csv")
+med_housing_2011_2015 <- read_nhgis("data/nhgis0006_csv/nhgis0006_ds215_20155_cbsa.csv")
+med_housing_2016_2020 <- read_nhgis("data/nhgis0006_csv/nhgis0006_ds249_20205_cbsa.csv")
 
 ##### TIME SERIES DATA #####
 race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)

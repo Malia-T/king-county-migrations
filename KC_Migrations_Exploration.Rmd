@@ -587,6 +587,24 @@ r_squared <- 1 - sum((pcts.test$estimate - tree.pred)^2) / sum((pcts.test$estima
 # pretty ok for just a single tree...
 print(paste("MSE", mse, "RMSE", rmse, "MAE", mae, "MAPE", mape, "R-squared", r_squared))
 ```
+```{r}
+# random forest with m = sqrt(p) ~ 3 trees
+rf.moves <- randomForest(estimate ~ ., data = data_mod, subset = train, mtry = 3, importance = TRUE)
+
+yhat.rf <- predict(rf.moves, newdata = data_mod[-train,])
+
+# TODO: adjust to forest
+mse <- mean((pcts.train - rf.moves)^2)
+rmse <- sqrt(mse)
+mae <- mean(abs(pcts.test$estimate - tree.pred))
+mape <- mean(abs((pcts.test$estimate - tree.pred) / pcts.test$estimate)) * 100
+```
+
+```{r}
+importance(rf.moves)
+
+varImpPlot(rf.moves, main = "Variable Importance vs Mean Decrease in Accuracy and Gini")
+```
 
 
 ## Functions

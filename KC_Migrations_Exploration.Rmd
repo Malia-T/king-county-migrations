@@ -329,6 +329,7 @@ ggplot() +
 ```
 
 ```{r}
+# map flows from 2011 to 2015 (ACS5)
 sea_flows_2015 <- get_flows(
   geography = "metropolitan statistical area",
   #breakdown = "RACE",
@@ -338,6 +339,7 @@ sea_flows_2015 <- get_flows(
   geometry = TRUE
 )
 
+# map flows from 2016 to 2020 (ACS5)
 sea_flows_2020 <- get_flows(
   geography = "metropolitan statistical area",
   breakdown_labels = TRUE,

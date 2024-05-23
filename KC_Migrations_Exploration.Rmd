@@ -25,6 +25,7 @@ library(sf)
 
 # modeling
 library(tree)
+library(randomForest)
 library(keras)
 
 # extracting survey/IPUMS/census data
@@ -538,19 +539,43 @@ While there are more white movers (way outnumber other classes), the percent of 
 
 ## MSA Analysis
 ```{r}
+# TODO: standardize to seattle-tacoma-bellevue
 sea_flows_2020 <- sea_flows_2020 %>% 
   dplyr::filter(variable == "MOVEDOUT")
 head(sea_flows_2020)
 
 head(median_housing_2011_2020)
 
-head(race_2000_2020)
+race_2010_2020 <- race_2000_2020 %>% 
+  dplyr::select(c(GISJOIN, CBSA, chg_white_2010_2020, chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020))
 
 # some mismatches in the numbers of observations...
 # focus on last 10 years for now...
 
-# left join so all flows are reflected
-flows_housing
+# inner join... might need to rework
+flows_housing_ <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FULL2_NAME" = "NAME_E.x"))
+
+data <- flows_housing_ %>% 
+  inner_join(race_2010_2020, by = c("FULL2_NAME" = "CBSA"))
+
+data_mod <- data %>% 
+  dplyr::select(c(estimate, housing_chg, chg_white_2010_2020, chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
+  st_drop_geometry()
+
+train <- sample(1:nrow(data_mod), nrow(data_mod) * 0.8)
+
+pcts.train <- data_mod[train,]
+pcts.test <- data_mod[-train,]
+
+tree.pcts <- tree(estimate ~ ., data=pcts.train)
+summary(tree.pcts)
+```
+```{r}
+plot(tree.pcts)
+text(tree.pcts, pretty = 0)
+```
+```{r}
+
 ```
 
 
@@ -755,6 +780,7 @@ pcts.test <- mod.data[-train,]
 tree.pcts <- tree(movers ~ ., data=pcts.train)
 summary(tree.pcts)
 ```
+
 ```{r}
 plot(tree.pcts)
 text(tree.pcts, pretty = 0)

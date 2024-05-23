@@ -594,10 +594,13 @@ rf.moves <- randomForest(estimate ~ ., data = data_mod, subset = train, mtry = 3
 yhat.rf <- predict(rf.moves, newdata = data_mod[-train,])
 
 # TODO: adjust to forest
-mse <- mean((pcts.train - rf.moves)^2)
+mse <- mean((data_mod[-train,]$estimate - yhat.rf)^2)
 rmse <- sqrt(mse)
 mae <- mean(abs(pcts.test$estimate - tree.pred))
 mape <- mean(abs((pcts.test$estimate - tree.pred) / pcts.test$estimate)) * 100
+
+# about 0.616
+r_squared <- 1 - sum((data_mod[-train,]$estimate - yhat.rf)^2) / sum((data_mod[-train,]$estimate - mean(data_mod[-train,]$estimate))^2)
 ```
 
 ```{r}

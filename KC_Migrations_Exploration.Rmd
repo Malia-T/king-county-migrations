@@ -134,6 +134,9 @@ setnames(county_race, old=c("NAME_E", "AKSME001", "AKSME002", "AKSME003", "AKSME
 
 head(county_race)
 
+##### Housing Data #####
+med_housing <- read_nhgis("data/nhgis0004_csv/nhgis0004_ds243_2019_metdiv.csv")
+
 ##### TIME SERIES DATA #####
 race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)
 # race data from 1990 to 2020

@@ -26,6 +26,7 @@ library(sf)
 # modeling
 library(tree)
 library(randomForest)
+library(randomForestExplainer)
 library(keras)
 
 # extracting survey/IPUMS/census data
@@ -588,7 +589,7 @@ r_squared <- 1 - sum((pcts.test$estimate - tree.pred)^2) / sum((pcts.test$estima
 print(paste("MSE", mse, "RMSE", rmse, "MAE", mae, "MAPE", mape, "R-squared", r_squared))
 ```
 ```{r}
-# random forest with m = sqrt(p) ~ 3 trees
+# random forest with p / 3 ~ 3 trees
 rf.moves <- randomForest(estimate ~ ., data = data_mod, subset = train, mtry = 3, importance = TRUE)
 
 yhat.rf <- predict(rf.moves, newdata = data_mod[-train,])
@@ -607,6 +608,13 @@ r_squared <- 1 - sum((data_mod[-train,]$estimate - yhat.rf)^2) / sum((data_mod[-
 importance(rf.moves)
 
 varImpPlot(rf.moves, main = "Variable Importance vs Mean Decrease in Accuracy and Gini")
+```
+```{r}
+plot(rf.moves)
+```
+
+```{r}
+explain_forest(rf.moves, data = data_mod)
 ```
 
 

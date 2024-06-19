@@ -103,6 +103,19 @@ med_housing_2016_2020 <- read_nhgis("data/nhgis0006_csv/nhgis0006_ds249_20205_cb
 ```
 
 ### Race Data by MSA
+NHGIS code:  U7J
+        U7J001:      Total
+        U7J002:      White alone
+        U7J003:      Black or African American alone
+        U7J004:      American Indian and Alaska Native alone
+        U7J005:      Asian alone
+        U7J006:      Native Hawaiian and Other Pacific Islander alone
+        U7J007:      Some Other Race alone
+        U7J008:      Two or More Races
+```{r}
+race_by_cbsa_2020 <- read.csv("data/nhgis0007_ds258_2020_cbsa.csv")
+```
+
 
 ## Data Wrangling
 ```{r}
@@ -923,6 +936,7 @@ write.csv(race_2010_2020, "data/race_2010-2020.csv", row.names = FALSE)
 
 ```{r}
 # TODO: construct probability of moving distributions via ecological inference (black vs non-black, white vs non-white)
+## can use 2015 race breakdown as the posterior for Bayesian inference?
 ```
 
 ```{r}

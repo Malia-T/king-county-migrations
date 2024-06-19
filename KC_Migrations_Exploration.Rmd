@@ -13,6 +13,7 @@ library(tidyr)
 library(stringr)
 library(data.table)
 library(readxl)
+library(tigris)
 
 # statistics
 library(stats)
@@ -84,8 +85,9 @@ head(acs_county_flows.2019)
 ## AKSME009: Two or more races: Two races including Some other race
 ## AKSME010: Two or more races: Two races excluding Some other race, and three or more races
 acs_char_2019 <- read.csv("data/nhgis_sex_race.csv")
+```
 
-
+``` {r}
 #### TIME SERIES DATA ####
 # race composition of MSAs from 1990 to 2020
 
@@ -99,6 +101,8 @@ race_1990_2020_codebook <- read_nhgis_codebook("data/nhgis0005_csv/nhgis0005_csv
 med_housing_2011_2015 <- read_nhgis("data/nhgis0006_csv/nhgis0006_ds215_20155_cbsa.csv")
 med_housing_2016_2020 <- read_nhgis("data/nhgis0006_csv/nhgis0006_ds249_20205_cbsa.csv")
 ```
+
+### Race Data by MSA
 
 ## Data Wrangling
 ```{r}
@@ -142,7 +146,9 @@ county_race <- acs_char_2019 %>%
 setnames(county_race, old=c("NAME_E", "AKSME001", "AKSME002", "AKSME003", "AKSME004", "AKSME005", "AKSME006", "AKSME007", "AKSME008", "AKSME009", "AKSME010"), new=c("county_name", "total", "white_alone", "black_alone", "amer_ind_ak_alone", "asian_alone", "nat_haw_pac_alone", "other_alone", "two_plus_alone", "two_some_other", "two_ex_some_three_plus"))
 
 head(county_race)
+```
 
+``` {r}
 #### HOUSING DATA ####
 med_h_2011_2015 <- med_housing_2011_2015 %>% 
   dplyr::select(c(GISJOIN, YEAR, CBSAA, NAME_E, ADRWE001)) %>% 
@@ -155,7 +161,8 @@ med_h_2016_2020 <- med_housing_2016_2020 %>%
   dplyr::select(-AMWBE001)
 
 median_housing_2011_2020 <- inner_join(med_h_2011_2015, med_h_2016_2020, by = "CBSAA") %>% 
-  mutate(housing_chg = median_cost.y - median_cost.x)
+  mutate(housing_chg = median_cost.y - median_cost.x) %>% 
+  select(-c(GISJOIN.x, GISJOIN.y, YEAR.x, YEAR.y))
   
 ##### TIME SERIES DATA #####
 #race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)
@@ -202,6 +209,7 @@ race_2000_2020 <- race_1990_2020 %>%
 
 
 ```{r}
+#### OLD ####
 # join movers with county data
 # outer join
 county_moves <- merge(kc_movers_2019, county_pops_2019, by.x="FULL2_NAME", by.y = "NAME_M", all.y=TRUE) %>%
@@ -534,11 +542,54 @@ pops_movers_2015$pct_movers <- pops_movers_2015$n / pops_movers_2015$estimate
 
 ggplot(data = pops_movers_2015, mapping = aes(x = race, y = pct_movers)) +
   geom_histogram(na.rm = TRUE, stat = "sum") +
-  ggtitle("Percent of Race Moving out of Seattle-Tacoma-Bellevue MSA (2011-2015)")
+  ggtitle("Proportion of Race Moving out of Seattle-Tacoma-Bellevue MSA (2011-2015)")
 ```
-While there are more white movers (way outnumber other classes), the percent of people in the "two or more/other" category that are moving out of Seattle-Tacoma-Bellevue vastly outnumbers the other race categories.
+2011-2015: While there are more white movers (way outnumber other classes), the percent of people in the "two or more/other" category that are moving out of Seattle-Tacoma-Bellevue vastly outnumbers the other race categories.
 
 ## MSA Analysis
+
+There are 387 total MSAs in the country... `sea_flows_2020` has 354 total rows (with some being outside US)
+```{r}
+med_h_2011_2020 <- median_housing_2011_2020 %>% 
+  select(-c(median_cost.y, median_cost.x, NAME_E.x))
+```
+
+```{r}
+dim(med_h_2011_2015)
+head(med_h_2011_2015)
+
+dim(med_h_2016_2020)
+head(med_h_2016_2020)
+
+head(med_h_2011_2020)
+
+# see what MSAS are not in the earlier dataset
+# 32 MSAs?
+View(dplyr::anti_join(med_h_2016_2020, med_h_2011_2015, by = "CBSAA"))
+
+# any difference in naming?
+# much larger difference in naming... 82 rows differ
+View(dplyr::anti_join(med_h_2016_2020, med_h_2011_2015, by = "NAME_E"))
+```
+
+``` {r}
+# how many rows have "metro" in title?
+s <- race_2010_2020$CBSA
+
+metros <- str_detect(s, "Metro")
+
+# 366 rows with "metro"
+# flows has 354 rows
+length(metros[metros == TRUE])
+
+s <- med_h_2011_2020$NAME_E.y
+
+metros <- str_detect(s, "Metro")
+
+# 388 rows with "metro"
+length(metros[metros == TRUE])
+```
+
 ```{r}
 # TODO: standardize to seattle-tacoma-bellevue
 sea_flows_2020 <- sea_flows_2020 %>% 
@@ -554,9 +605,9 @@ race_2010_2020 <- race_2000_2020 %>%
 # focus on last 10 years for now...
 
 # inner join... might need to rework
-flows_housing_ <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FULL2_NAME" = "NAME_E.x"))
+flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FULL2_NAME" = "NAME_E.x"))
 
-data <- flows_housing_ %>% 
+data <- flows_housing %>% 
   inner_join(race_2010_2020, by = c("FULL2_NAME" = "CBSA"))
 
 data_mod <- data %>% 
@@ -614,7 +665,7 @@ plot(rf.moves)
 ```
 
 ```{r}
-explain_forest(rf.moves, data = data_mod)
+#explain_forest(rf.moves, data = data_mod)
 ```
 
 
@@ -854,6 +905,15 @@ summary(basic.lin.mod)
 ```
 
 ```{r}
+# TODO: output csv?
+write.csv(sea_flows_2020, "data/sea_mig_2020.csv", row.names = FALSE)
+
+write.csv(med_h_2011_2020, "data/msa_med_housing_2011-2020.csv", row.names = FALSE)
+
+write.csv(race_2010_2020, "data/race_2010-2020.csv", row.names = FALSE)
+```
+
+```{r}
 # TODO: compare acs1, acs3, acs5 results?
 ```
 
@@ -868,4 +928,5 @@ summary(basic.lin.mod)
 ```{r}
 # TODO: after constructing the probability distributions, consider what the implications are given the change in demographics
 ```
+
 

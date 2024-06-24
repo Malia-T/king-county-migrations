@@ -1,0 +1,83 @@
+---
+title: "Ecological Inference"
+author: "Malia Cortez"
+date: "2024-06-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(stringr)
+library(data.table)
+library(readxl)
+library(tigris)
+
+# statistics
+library(stats)
+
+# mapping and plotting
+library(ggplot2)
+library(terra)
+library(mapdeck)
+library(sf)
+
+library(brms)
+
+# modeling
+#library(tree)
+#library(randomForest)
+#library(randomForestExplainer)
+#library(keras)
+
+# extracting survey/IPUMS/census data
+#library(survey)
+#library(srvyr)
+library(ipumsr)
+library(tidycensus)
+```
+
+The purpose of this notebook is to explore ecological inference methods for the migration data. How do movers break down by race? Are there distinguishable groups between white/non-white, black/non-black populations?
+
+## Load in Data
+### Race Data
+NHGIS code:  U7J
+        U7J001:      Total
+        U7J002:      White alone
+        U7J003:      Black or African American alone
+        U7J004:      American Indian and Alaska Native alone
+        U7J005:      Asian alone
+        U7J006:      Native Hawaiian and Other Pacific Islander alone
+        U7J007:      Some Other Race alone
+        U7J008:      Two or More Races
+```{r cars}
+# race data by cbsa
+race_by_cbsa_2020 <- read.csv("data/nhgis0007_ds258_2020_cbsa.csv")
+head(race_by_cbsa_2020)
+```
+
+```{r}
+# 2015 mover data by msa (race breakdown)
+
+
+# 2020 mover data by msa (race breakdown unavailable)
+sea_flows_2020 <- get_flows(
+  geography = "cbsa",
+  breakdown_labels = TRUE,
+  msa = 42660,
+  year = 2020,
+  geometry = TRUE
+)
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

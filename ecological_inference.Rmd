@@ -96,12 +96,16 @@ head(sea_flows_2020)
 
 ```{r}
 # filter for just movedOut
-flows.race.out.2015 <- sea_flows_2015_race %>% 
-  filter(variable == "MOVEDOUT")
+flows.race.2015 <- sea_flows_2015_race %>% 
+  dplyr::filter(variable == "MOVEDOUT")
 ```
 
 
 ## 2015 Exploration
+
+Questions for 2015 with the racial breakdowns:
+- what do the distributions of movers look like for each race?
+- Who is moving?
 
 ## 2020 Exploration
 

@@ -105,7 +105,8 @@ flows.race.2015 <- sea_flows_2015_race %>%
 
 Questions for 2015 with the racial breakdowns:
 - what do the distributions of movers look like for each race?
-- Who is moving?
+- Who is moving? What proportions?
+- Compare other years?
 
 ## 2020 Exploration
 

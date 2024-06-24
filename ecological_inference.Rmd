@@ -40,6 +40,16 @@ library(tidycensus)
 
 The purpose of this notebook is to explore ecological inference methods for the migration data. How do movers break down by race? Are there distinguishable groups between white/non-white, black/non-black populations?
 
+## Notes
+
+To help with my understanding, here is the notation for this problem (King's EI).
+
+If all assumptions are met and we can use EI, for each MSA $i$, we want to estimate the race composition of movers from Seattle-Tacoma-Bellevue MSA, that is the Black and non-Black as well as white/non-white quantities. In the former case which I will look at first, let $\beta_{i}^b$ be the fraction of Black populations who move, and let $\beta_{i}^n$ be the fraction of non-Black populations who move. We want to estimate these quantities from aggregate variables $X_i$ (the fraction of people who are Black), $T_i$ (the fraction of people who moved), and $N_i$ (the known total population of people).
+
+To start, we can plot $X_i$ against $T_i$
+
+According to https://gking.harvard.edu/files/eiintro.pdf, using King's EI has 3 assumptions.
+
 ## Load in Data
 ### Race Data
 NHGIS code:  U7J
@@ -59,7 +69,16 @@ head(race_by_cbsa_2020)
 
 ```{r}
 # 2015 mover data by msa (race breakdown)
+sea_flows_2015_race <- get_flows(
+  geography = "cbsa",
+  breakdown_labels = TRUE,
+  breakdown = "RACE",
+  msa = 42660,
+  year = 2015,
+  geometry = TRUE
+)
 
+head(sea_flows_2015_race)
 
 # 2020 mover data by msa (race breakdown unavailable)
 sea_flows_2020 <- get_flows(
@@ -69,14 +88,24 @@ sea_flows_2020 <- get_flows(
   year = 2020,
   geometry = TRUE
 )
+
+head(sea_flows_2020)
+```
+
+```{r}
+# filter for just movedOut
+flows.race.out.2015 <- sea_flows_2015_race %>% 
+  filter(variable == "MOVEDOUT")
 ```
 
 
-## Including Plots
+## 2015 Exploration
 
-You can also embed plots, for example:
+## 2020 Exploration
 
-```{r pressure, echo=FALSE}
+## Results/Discuss?
+
+```{r}
 plot(pressure)
 ```
 

@@ -619,8 +619,8 @@ dim(cbsa)
 dim(median_housing_2011_2020)
 cbsa_compare_housing <- full_join(cbsa, median_housing_2011_2020, by = c("GEOID" = "CBSAA.x"))
 
-write.csv(cbsa, file="cbsas_2021.csv")
-write.csv(cbsa_compare_housing, file = "cbsas_housing.csv")
+write_csv(cbsa, file="cbsas_2021.csv")
+write_csv(cbsa_compare_housing, file = "cbsas_housing.csv")
 
 # 32 missing cbsa from housing data
 # 2 are metro areas, the rest are micro areas
@@ -650,7 +650,7 @@ race_2010_2020 <- race_2000_2020 %>%
 # focus on last 10 years for now...
 
 # inner join... might need to rework
-#flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FULL2_NAME" = "NAME_E.x"))
+flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("GEOID2" = "CBSAA.x"))
 
 race_housing <- inner_join(median_housing_2011_2020, race_2010_2020, by = "GISJOIN") %>% 
   select(-c(GISJOIN, NAME_E.x, YEAR.x, YEAR.y, CBSAA.y, median_cost.x, median_cost.y))
@@ -658,7 +658,11 @@ race_housing <- inner_join(median_housing_2011_2020, race_2010_2020, by = "GISJO
 data <- race_housing %>% 
   inner_join(sea_flows_2020, by = c("CBSAA.x" = "FULL2_NAME"))
 
-write.csv(data, file = 'flows_race_housing.csv', sep = ",")
+data2 <- flows_housing %>% 
+  inner_join(race_2010_2020, by = c("GEOID2" = "GEOID"))
+
+write_csv(data, file = 'flows_race_housing.csv', sep = ",")
+write_csv(data2, file = "flows_race_housing-2.csv")
 
 data_mod <- data %>% 
   dplyr::select(c(estimate, housing_chg, chg_white_2010_2020, chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 

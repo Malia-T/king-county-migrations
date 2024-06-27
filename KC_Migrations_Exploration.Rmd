@@ -173,11 +173,12 @@ med_h_2016_2020 <- med_housing_2016_2020 %>%
   dplyr::mutate(median_cost = AMWBE001) %>% 
   dplyr::select(-AMWBE001)
 
-median_housing_2011_2020 <- inner_join(med_h_2011_2015, med_h_2016_2020, by = "CBSAA") %>% 
-  mutate(housing_chg = median_cost.y - median_cost.x) %>% 
-  select(-c(GISJOIN.x, GISJOIN.y, YEAR.x, YEAR.y))
+median_housing_2011_2020 <- inner_join(med_h_2011_2015, med_h_2016_2020, by = "GISJOIN") %>% 
+  mutate(housing_chg = median_cost.y - median_cost.x)
+
+median_housing_2011_2020$CBSAA.x <- as.character(median_housing_2011_2020$CBSAA.x)
   
-##### TIME SERIES DATA #####
+##### RACE DATA #####
 #race_ts <- set_ipums_var_attributes(race_1990_2020, race_1990_2020_codebook$var_info)
 # race data from 1990 to 2020
 print(ipums_var_info(race_ts))
@@ -604,6 +605,37 @@ length(metros[metros == TRUE])
 ```
 
 ```{r}
+# attempting to fix the mess with the geometry...
+# 2021 cbsa data
+cbsa <- core_based_statistical_areas()
+
+# seems like there were more cbsas in 2010
+cbsa_2010 <- core_based_statistical_areas(year = 2010)
+
+dim(cbsa)
+
+## HOUSING ##
+# full outer join
+dim(median_housing_2011_2020)
+cbsa_compare_housing <- full_join(cbsa, median_housing_2011_2020, by = c("GEOID" = "CBSAA.x"))
+
+write.csv(cbsa, file="cbsas_2021.csv")
+write.csv(cbsa_compare_housing, file = "cbsas_housing.csv")
+
+# 32 missing cbsa from housing data
+# 2 are metro areas, the rest are micro areas
+# since the flow data only has data for metro areas, we can probably ignore/supplement these manually 
+sum(is.na(cbsa_compare_housing$NAME_E.x))
+
+## RACE ##
+# extract the GEOID
+race_2010_2020$GEOID <- substring(race_2010_2020$GISJOIN, 2)
+dim(race_2010_2020)
+
+cbsa_compare_race <- left_join(cbsa, race_2010_2020, by = "GEOID")
+```
+
+```{r}
 # TODO: standardize to seattle-tacoma-bellevue
 sea_flows_2020 <- sea_flows_2020 %>% 
   dplyr::filter(variable == "MOVEDOUT")
@@ -618,12 +650,15 @@ race_2010_2020 <- race_2000_2020 %>%
 # focus on last 10 years for now...
 
 # inner join... might need to rework
-flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FULL2_NAME" = "NAME_E.x"))
+#flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FULL2_NAME" = "NAME_E.x"))
 
-data <- flows_housing %>% 
-  inner_join(race_2010_2020, by = c("FULL2_NAME" = "CBSA"))
+race_housing <- inner_join(median_housing_2011_2020, race_2010_2020, by = "GISJOIN") %>% 
+  select(-c(GISJOIN, NAME_E.x, YEAR.x, YEAR.y, CBSAA.y, median_cost.x, median_cost.y))
 
-write.csv(data, file = 'flows_race_housing.csv')
+data <- race_housing %>% 
+  inner_join(sea_flows_2020, by = c("CBSAA.x" = "FULL2_NAME"))
+
+write.csv(data, file = 'flows_race_housing.csv', sep = ",")
 
 data_mod <- data %>% 
   dplyr::select(c(estimate, housing_chg, chg_white_2010_2020, chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
@@ -943,6 +978,8 @@ write.csv(race_2010_2020, "data/race_2010-2020.csv", row.names = FALSE)
 
 ```{r}
 # TODO: after constructing the probability distributions, consider what the implications are given the change in demographics
+# are some races more "mobile" than others? able to seek more opportunity? apply to other cities?
+
 ```
 
 

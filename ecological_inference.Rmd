@@ -91,6 +91,15 @@ sea_flows_2020 <- get_flows(
   geometry = TRUE
 )
 
+# 2019 test
+sea_flows_2019 <- get_flows(
+  geography = "cbsa",
+  breakdown_labels = TRUE,
+  msa = 42660,
+  year = 2020,
+  geometry = TRUE
+)
+
 head(sea_flows_2020)
 ```
 
@@ -107,6 +116,11 @@ Questions for 2015 with the racial breakdowns:
 - what do the distributions of movers look like for each race?
 - Who is moving? What proportions?
 - Compare other years?
+
+## 2019 Exploration
+
+Questions for 2019/2020:
+- how do patterns differ between 2019 and 2020?
 
 ## 2020 Exploration
 

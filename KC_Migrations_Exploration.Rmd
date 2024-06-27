@@ -623,6 +623,8 @@ flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("FU
 data <- flows_housing %>% 
   inner_join(race_2010_2020, by = c("FULL2_NAME" = "CBSA"))
 
+write.csv(data, file = 'flows_race_housing.csv')
+
 data_mod <- data %>% 
   dplyr::select(c(estimate, housing_chg, chg_white_2010_2020, chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
   st_drop_geometry()

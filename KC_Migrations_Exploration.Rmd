@@ -22,6 +22,7 @@ library(stats)
 library(ggplot2)
 library(terra)
 library(mapdeck)
+library(mapboxapi)
 library(sf)
 
 # modeling
@@ -49,6 +50,8 @@ View(v20)
 
 # Seattle-Tacoma-Bellevue
 # MSA FIPS: 42660
+
+
 ```
 
 
@@ -407,7 +410,7 @@ top_move_out <- sea_flows_2015 %>%
 
 # map the top 25 MSAs moving out from WA
 top_move_out %>% 
-  mapdeck(style=mapdeck_style("dark"), pitch = 45) %>% 
+  mapdeck(style=mapdeck_style("dark"), pitch = 45, token = Sys.getenv("MAPBOX_PUBLIC_TOKEN")) %>% 
   add_arc(
     origin = "centroid1",
     destination = "centroid2",
@@ -435,7 +438,8 @@ top_move_out <- sea_flows_2020 %>%
 
 # map the top 25 MSAs moving out from WA
 top_move_out %>% 
-  mapdeck(style=mapdeck_style("dark"), pitch = 45) %>% 
+  mapdeck(style=mapdeck_style("dark"), pitch = 45,
+          token = Sys.getenv("MAPBOX_PUBLIC_TOKEN")) %>% 
   add_arc(
     origin = "centroid1",
     destination = "centroid2",

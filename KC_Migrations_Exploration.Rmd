@@ -596,7 +596,7 @@ s <- race_2010_2020$CBSA
 
 metros <- str_detect(s, "Metro")
 
-# 366 rows with "metro"
+# 366 rows with "metro" in race data
 # flows has 354 rows
 length(metros[metros == TRUE])
 
@@ -604,9 +604,14 @@ s <- med_h_2011_2020$NAME_E.y
 
 metros <- str_detect(s, "Metro")
 
-# 388 rows with "metro"
+# 388 rows with "metro" in housing data
 length(metros[metros == TRUE])
 ```
+```{r}
+anti_join(metros, race_2010_2020, by)
+```
+
+
 
 ```{r}
 # attempting to fix the mess with the geometry...
@@ -617,6 +622,7 @@ cbsa <- core_based_statistical_areas()
 cbsa_2010 <- core_based_statistical_areas(year = 2010)
 
 dim(cbsa)
+dim(cbsa_2010)
 
 ## HOUSING ##
 # full outer join

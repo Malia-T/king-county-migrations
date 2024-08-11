@@ -59,14 +59,7 @@ head(race)
 metro_race <- race %>% 
   filter(str_detect(CBSA, "Metro"))
 
-# which msas had highest influx of black population?
-ggplot(metro_race, aes(x = reorder(CBSA, chg_black_2010_2020), y = chg_black_2010_2020)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Metro Areas with Most Positive Change in Black Population",
-       x = "MSA",
-       y = "Value") +
-  coord_flip()
-
+# which msa saw most positive change in Black pop?
 ggplot(metro_race %>% 
          arrange(desc(chg_black_2010_2020)) %>% 
          slice_head(n = 10),
@@ -74,6 +67,18 @@ ggplot(metro_race %>%
            y = chg_black_2010_2020)) +
   geom_bar(stat = "identity") +
   labs(title = "Metro Areas with Most Positive Change in Black Population",
+       x = "MSA",
+       y = "Value") +
+  coord_flip()
+
+# which msa saw most negative change in Black pop?
+ggplot(metro_race %>% 
+         arrange(chg_black_2010_2020) %>% 
+         slice_head(n = 10),
+       aes(x = reorder(CBSA, -chg_black_2010_2020),
+           y = chg_black_2010_2020)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Metro Areas with Most Negative Change in Black Population",
        x = "MSA",
        y = "Value") +
   coord_flip()

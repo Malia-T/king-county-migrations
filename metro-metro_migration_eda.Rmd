@@ -50,7 +50,7 @@ migrations <- read.csv("data/sea_mig_2020.csv")
 # load in pop data eventually...
 ```
 
-## Including Plots
+## Race Data Exploration
 Lots of movement to the South for Black populations between 2010 and 2020 (ATL GA, Dallas FT Worth + Houston TX), with DC in 3rd place.
 ```{r}
 # race data
@@ -83,13 +83,18 @@ ggplot(metro_race %>%
        y = "Value") +
   coord_flip()
 ```
+# Housing Data Exploration
+California metro areas dominated in terms of increasing housing value (Boulder CO in 8th place). Interestingly, areas in Puerto Rico seem to be experiencing increasingly diminished median housing values, with East Stroudsburg PA in 9th and Peoria, IL in 10th (though, with non-negative housing value increase).
 ```{r}
 # housing data
 head(housing)
 
+metro_housing <- housing %>% 
+  filter(str_detect(NAME_E.y, "Metro"))
+
 # which areas saw most positive change in housing? Positive?
 # would like to see more updated data, Seattle's had some huge changes recently
-ggplot(housing %>% 
+ggplot(metro_housing %>% 
          arrange(desc(housing_chg)) %>% 
          slice_head(n = 10),
        aes(x = reorder(NAME_E.y, housing_chg),
@@ -99,9 +104,36 @@ ggplot(housing %>%
        x = "MSA",
        y = "Value") +
   coord_flip()
-```
 
+# most negative change?
+ggplot(metro_housing %>% 
+         arrange(housing_chg) %>% 
+         slice_head(n = 10),
+       aes(x = reorder(NAME_E.y, -housing_chg),
+           y = housing_chg)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Metro Areas with Most Negative Change in Housing",
+       x = "MSA",
+       y = "Value") +
+  coord_flip()
+```
+## Migration Data Exploration
 ```{r}
 # migration data
+migrations <- migrations %>% 
+  filter(FULL2_NAME != "Outside Metro Area within U.S. or Puerto Rico") %>% 
+  select(-c(j, k))
+
+
+ggplot(migrations %>% 
+         arrange(desc(estimate)) %>% 
+         slice_head(n = 10),
+       aes(x = reorder(FULL2_NAME, estimate),
+           y = estimate)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Metro Areas with Most Movers from Seattle-Tacoma-Bellevue",
+       x = "MSA",
+       y = "Value") +
+  coord_flip()
 ```
 

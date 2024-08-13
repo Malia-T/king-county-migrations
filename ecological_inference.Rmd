@@ -23,7 +23,9 @@ library(terra)
 library(mapdeck)
 library(sf)
 
+# modeling and inference
 library(brms)
+library(mcmc)
 
 # modeling
 #library(tree)
@@ -135,6 +137,36 @@ flows_race_metro <- inner_join(race_by_cbsa_2020, sea_flows_2020, by = c("GEOCOD
   setnames(old=c("estimate"), new=c("sea_movers"))
 ```
 
+
+```{r}
+# define a function to calculate percentages of each race given dataset
+calc_percentages <- function(data){
+  race_cols <- c("white", "black", "american_ind_ak", "asian", "native_hawaiian_pi", "some_other_alone", "two_plus")
+  migration_col <- c("sea_movers")
+  
+  for (race in race_cols) {
+    data[[race]] <- (data[[race]] / data$tot) * 100
+  }
+  
+  data[[migration_col]] <- (data[[migration_col]] / data$tot) * 100
+  
+  return(data)
+}
+```
+
+```{r}
+calc_percentages(flows_race_metro)
+```
+
+```{r}
+ggplot(flows_race_metro, aes(x = black, y = sea_movers)) +
+  geom_point()
+```
+
+```{r}
+ggplot(flows_race_metro, aes(x = white, y = sea_movers)) +
+  geom_point()
+```
 
 ```{r}
 # filter for just movedOut

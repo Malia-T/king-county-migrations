@@ -51,7 +51,7 @@ migrations <- read.csv("data/sea_mig_2020.csv")
 ```
 
 ## Including Plots
-Lots of movement to the South for Black populations (ATL GA, Dallas FT Worth + Houston TX), with DC in 3rd place.
+Lots of movement to the South for Black populations between 2010 and 2020 (ATL GA, Dallas FT Worth + Houston TX), with DC in 3rd place.
 ```{r}
 # race data
 head(race)
@@ -83,5 +83,25 @@ ggplot(metro_race %>%
        y = "Value") +
   coord_flip()
 ```
+```{r}
+# housing data
+head(housing)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# which areas saw most positive change in housing? Positive?
+# would like to see more updated data, Seattle's had some huge changes recently
+ggplot(housing %>% 
+         arrange(desc(housing_chg)) %>% 
+         slice_head(n = 10),
+       aes(x = reorder(NAME_E.y, housing_chg),
+           y = housing_chg)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Metro Areas with Most Positive Change in Housing (Value Increasing)",
+       x = "MSA",
+       y = "Value") +
+  coord_flip()
+```
+
+```{r}
+# migration data
+```
+

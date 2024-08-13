@@ -608,7 +608,7 @@ metros <- str_detect(s, "Metro")
 length(metros[metros == TRUE])
 ```
 ```{r}
-anti_join(metros, race_2010_2020, by)
+#anti_join(metros, race_2010_2020, by)
 ```
 
 
@@ -660,10 +660,11 @@ race_2010_2020 <- race_2000_2020 %>%
 # focus on last 10 years for now...
 
 # inner join... might need to rework
-flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("GEOID2" = "CBSAA.x"))
+flows_housing <- inner_join(sea_flows_2020, median_housing_2011_2020, by = c("GEOID2" = "CBSAA.x")) %>% 
+  as.data.frame()
 
 race_housing <- inner_join(median_housing_2011_2020, race_2010_2020, by = "GISJOIN") %>% 
-  select(-c(GISJOIN, NAME_E.x, YEAR.x, YEAR.y, CBSAA.y, median_cost.x, median_cost.y))
+  select(-c(NAME_E.x, YEAR.x, YEAR.y, CBSAA.y, median_cost.x, median_cost.y))
 
 data <- race_housing %>% 
   inner_join(sea_flows_2020, by = c("CBSAA.x" = "FULL2_NAME"))
@@ -970,7 +971,9 @@ summary(basic.lin.mod)
 
 ```{r}
 # TODO: output csv?
-write.csv(sea_flows_2020, "data/sea_mig_2020.csv", row.names = FALSE)
+# fixed manually for now...
+# how to make centroids show correctly in csv?
+write.csv(as.data.frame(sea_flows_2020), "data/sea_mig_2020.csv", row.names = FALSE)
 
 write.csv(med_h_2011_2020, "data/msa_med_housing_2011-2020.csv", row.names = FALSE)
 

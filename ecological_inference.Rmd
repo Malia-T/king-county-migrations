@@ -50,7 +50,16 @@ To start, we can plot $X_i$ against $T_i$...
 
 Goodman's ecological regression?
 
-According to https://gking.harvard.edu/files/eiintro.pdf, using King's EI has 3 assumptions.
+According to Ecological Inference - New Methodological Strategies https://gking.harvard.edu/files/eiintro.pdf, using King's EI has 3 assumptions.
+- one cluster (not distinguishable)
+- no spatial autocorrelation
+- mean independence between regressor and unknowns conditional on $X_i$ and $Z_i$
+
+These allow one to compute a posterior (or sampling) distribution of the two unknowns in each "precinct" in the voting example.
+
+In EI, quantities of interest are not parameters of the likelihood, but come from conditioning on $T_i$ (the fraction of people who voted in the book example) and producing a posterior for (in the book's example, the proportion of Black voters vs proportion of white voters). In the migration case, we could condition on the fraction of people who moved, producing a posterior for the proportion of Black movers vs proportion of white (or nonblack) movers for each metro area.
+
+Conditioning on $T$ is "widely regarded as a critical step in applying the EI model".
 
 ## Load in Data
 ### Race Data
@@ -68,6 +77,10 @@ NHGIS code:  U7J
 race_by_cbsa_2020 <- read.csv("data/nhgis0007_ds258_2020_cbsa.csv")
 head(race_by_cbsa_2020)
 ```
+```{r}
+
+```
+
 
 ```{r}
 # 2015 mover data by msa (race breakdown)
@@ -108,6 +121,11 @@ head(sea_flows_2020)
 flows.race.2015 <- sea_flows_2015_race %>% 
   dplyr::filter(variable == "MOVEDOUT")
 ```
+```{r}
+# wrangling race data
+```
+
+
 
 
 ## 2015 Exploration

@@ -78,9 +78,16 @@ race_by_cbsa_2020 <- read.csv("data/nhgis0007_ds258_2020_cbsa.csv")
 head(race_by_cbsa_2020)
 ```
 ```{r}
+race_by_cbsa_2020 <- race_by_cbsa_2020 %>% 
+  select(c(GEOCODE, CBSA, NAME, U7J001, U7J002, U7J003,
+                  U7J004, U7J005, U7J006, U7J007, U7J008)) %>% 
+  setnames(old=c("U7J001", "U7J002", "U7J003",
+                  "U7J004", "U7J005", "U7J006", "U7J007", "U7J008"),
+           new=c("tot", "white", "black", "american_ind_ak", "asian", "native_hawaiian_pi", "some_other_alone", "two_plus")) %>% 
+  # filter for just metro areas
+  filter(str_detect(NAME, "Metro"))
 
 ```
-
 
 ```{r}
 # 2015 mover data by msa (race breakdown)
@@ -104,6 +111,10 @@ sea_flows_2020 <- get_flows(
   geometry = TRUE
 )
 
+sea_flows_2020 <- sea_flows_2020 %>% 
+  dplyr::filter(variable == "MOVEDOUT")
+head(sea_flows_2020)
+
 # 2019 test
 sea_flows_2019 <- get_flows(
   geography = "cbsa",
@@ -115,6 +126,15 @@ sea_flows_2019 <- get_flows(
 
 head(sea_flows_2020)
 ```
+
+```{r}
+race_by_cbsa_2020$GEOCODE <- as.character(race_by_cbsa_2020$GEOCODE)
+
+flows_race_metro <- inner_join(race_by_cbsa_2020, sea_flows_2020, by = c("GEOCODE" ="GEOID2")) %>% 
+  select(-c(FULL1_NAME, FULL2_NAME, GEOID1, variable, moe, centroid1, centroid2)) %>% 
+  setnames(old=c("estimate"), new=c("sea_movers"))
+```
+
 
 ```{r}
 # filter for just movedOut

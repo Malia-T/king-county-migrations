@@ -54,7 +54,7 @@ Goodman's ecological regression?
 
 According to Ecological Inference - New Methodological Strategies https://gking.harvard.edu/files/eiintro.pdf, using King's EI has 3 assumptions.
 - one cluster (not distinguishable)
-- no spatial autocorrelation
+- no spatial autocorrelation (can often be violated without introducing much bias)
 - mean independence between regressor and unknowns conditional on $X_i$ and $Z_i$
 
 These allow one to compute a posterior (or sampling) distribution of the two unknowns in each "precinct" in the voting example.

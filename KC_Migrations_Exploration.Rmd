@@ -222,6 +222,21 @@ race_2000_2020 <- race_1990_2020 %>%
            chg_asian_2000_2010, chg_asian_2010_2020, chg_nhpi_2000_2010,
            chg_nhpi_2010_2020, chg_other_2000_2010, chg_other_2010_2020,
            chg_twoplus_2000_2010, chg_twoplus_2010_2020))
+
+# calculate change over time as a percentage
+# only from 2010 to 2020
+# only metro areas
+race_2010_2020_pcts <- race_1990_2020 %>% 
+  mutate(chg_white_2010_2020 = ((CM1AA2020 - CM1AA2010)/CM1AA2010) * 100,
+         chg_black_2010_2020 = ((CM1AB2020 - CM1AB2010)/CM1AB2010)*100,
+         chg_aiak_2010_2020 = ((CM1AC2020 - CM1AC2010)/CM1AC2010) * 100,
+         chg_asian_2010_2020 = ((CM1AD2020 - CM1AD2010)/CM1AD2010) * 100,
+         chg_nhpi_2010_2020 = ((CM1AE2020 - CM1AE2010)/CM1AE2010) * 100,
+         chg_other_2010_2020 = ((CM1AF2020 - CM1AF2010)/CM1AF2010) * 100,
+         chg_twoplus_2010_2020 = ((CM1AG2020 - CM1AG2010)/CM1AG2010)*100) %>% 
+  dplyr::select(c(GISJOIN, CBSA, chg_white_2010_2020,
+           chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
+  filter(str_detect(CBSA, "Metro"))
 ```
 
 

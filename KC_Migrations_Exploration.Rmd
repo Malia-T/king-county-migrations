@@ -256,7 +256,7 @@ race_2010_2020_pcts <- race_1990_2020 %>%
 ```{r}
 # output csv
 write.csv(race_2010_2020_pcts, "data/race_2010-2020_pcts.csv", row.names = FALSE)
-write.csv(race_2010_2020, "data/race_2010_2020.csv", row.names = FALSE)
+write.csv(race_2010_2020, "data/race_2010-2020.csv", row.names = FALSE)
 ```
 
 

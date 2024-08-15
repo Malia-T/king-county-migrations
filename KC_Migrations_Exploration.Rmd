@@ -202,6 +202,7 @@ head(race_1990_2020)
 #### Calculate change over time for each group ####
 ## consider getting rid of 1990 - 2000: from a while ago
 ## starting in 2000 census, people could mark themselves as multiracial also ^
+# eventually look at 2000 to 2010
 race_2000_2020 <- race_1990_2020 %>% 
   mutate(chg_white_2000_2010 = CM1AA2010 - CM1AA2000,
          chg_white_2010_2020 = CM1AA2020 - CM1AA2010,
@@ -223,6 +224,18 @@ race_2000_2020 <- race_1990_2020 %>%
            chg_nhpi_2010_2020, chg_other_2000_2010, chg_other_2010_2020,
            chg_twoplus_2000_2010, chg_twoplus_2010_2020))
 
+race_2010_2020 <- race_1990_2020 %>% 
+  mutate(chg_white_2010_2020 = CM1AA2020 - CM1AA2010,
+         chg_black_2010_2020 = CM1AB2020 - CM1AB2010,
+         chg_aiak_2010_2020 = CM1AC2020 - CM1AC2010,
+         chg_asian_2010_2020 = CM1AD2020 - CM1AD2010,
+         chg_nhpi_2010_2020 = CM1AE2020 - CM1AE2010,
+         chg_other_2010_2020 = CM1AF2020 - CM1AF2010,
+         chg_twoplus_2010_2020 = CM1AG2020 - CM1AG2010) %>% 
+  dplyr::select(c(GISJOIN, CBSA, chg_white_2010_2020,
+           chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
+  subset(grepl("Metro", CBSA))
+
 # calculate change over time as a percentage
 # only from 2010 to 2020
 # only metro areas
@@ -236,14 +249,14 @@ race_2010_2020_pcts <- race_1990_2020 %>%
          chg_twoplus_2010_2020 = ((CM1AG2020 - CM1AG2010)/CM1AG2010)*100) %>% 
   dplyr::select(c(GISJOIN, CBSA, chg_white_2010_2020,
            chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
-  subset(grepl("Metro", CBSA))
-
+  subset(grepl("Met", CBSA))
 
 ```
 
 ```{r}
 # output csv
-write.csv(race_2010_2020_pcts, "data/race_2010-2020_pcts.csv")
+write.csv(race_2010_2020_pcts, "data/race_2010-2020_pcts.csv", row.names = FALSE)
+write.csv(race_2010_2020, "data/race_2010_2020.csv", row.names = FALSE)
 ```
 
 

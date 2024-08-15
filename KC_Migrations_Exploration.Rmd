@@ -236,8 +236,16 @@ race_2010_2020_pcts <- race_1990_2020 %>%
          chg_twoplus_2010_2020 = ((CM1AG2020 - CM1AG2010)/CM1AG2010)*100) %>% 
   dplyr::select(c(GISJOIN, CBSA, chg_white_2010_2020,
            chg_black_2010_2020, chg_aiak_2010_2020, chg_asian_2010_2020, chg_nhpi_2010_2020, chg_other_2010_2020, chg_twoplus_2010_2020)) %>% 
-  filter(str_detect(CBSA, "Metro"))
+  subset(grepl("Metro", CBSA))
+
+
 ```
+
+```{r}
+# output csv
+write.csv(race_2010_2020_pcts, "data/race_2010-2020_pcts.csv")
+```
+
 
 
 ```{r}
